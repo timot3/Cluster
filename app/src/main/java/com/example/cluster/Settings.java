@@ -36,6 +36,7 @@ public class Settings extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment Settings.
      */
+
     // TODO: Rename and change types and number of parameters
     public static Settings newInstance(String param1, String param2) {
         Settings fragment = new Settings();
