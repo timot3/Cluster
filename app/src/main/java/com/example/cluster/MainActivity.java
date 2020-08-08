@@ -2,6 +2,8 @@ package com.example.cluster;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -26,17 +28,22 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseUser user;
     private FirebaseAuth AuthUser;
 
+    private ProgressDialog loginDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         AuthUser = FirebaseAuth.getInstance();
+        setLoginDialog();
     }
 
     public void onSignInClick(View v) {
+
         String email = ((EditText) findViewById(R.id.emailField)).getText().toString();
         String password = ((EditText) findViewById(R.id.PasswordField)).getText().toString();
 
+        loginDialog.show();
         AuthUser.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     //If Login is successful
@@ -46,10 +53,39 @@ public class MainActivity extends AppCompatActivity {
                         Intent i = new Intent(MainActivity.this, Lobby.class);
                         startActivity(i);
                     }
+                    //Show error message
+                    else {
+                        sendInvalidAlert();
+                    }
 
-                    //Login is unsuccessful
-                    //Do nothing
+                    loginDialog.dismiss();
                 });
 
+    }
+
+
+    /**
+     * Creates login Dialog
+     */
+    private void setLoginDialog() {
+        loginDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
+        loginDialog.setTitle("Loading");
+        loginDialog.setMessage("Please Wait... Logging in");
+        loginDialog.setCancelable(false);
+    }
+
+    /**
+     * Creates and Sends an Invalid Alert when Logging in
+     */
+    private void sendInvalidAlert() {
+        this.runOnUiThread(() -> {
+            AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this,
+                    R.style.MyAlertDialogStyle).create();
+            alertDialog.setTitle("Error");
+            alertDialog.setMessage("Invalid username/password");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    (dialog, which) -> dialog.dismiss());
+            alertDialog.show();
+        });
     }
 }
