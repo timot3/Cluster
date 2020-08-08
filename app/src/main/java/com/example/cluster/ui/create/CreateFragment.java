@@ -19,6 +19,8 @@ import com.example.cluster.R;
 import com.example.cluster.ui.join.JoinViewModel;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.HttpsCallableResult;
 
@@ -27,7 +29,8 @@ import java.util.Map;
 
 public class CreateFragment extends Fragment {
     private CreateViewModel createViewModel;
-    private FirebaseFunctions functions;
+    private FirebaseFunctions functions = FirebaseFunctions.getInstance();
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -44,11 +47,11 @@ public class CreateFragment extends Fragment {
 
 
         Button button = root.findViewById(R.id.createButton);
-        final String clusterName = ((EditText) root.findViewById(R.id.createField)).getText().toString();
-        final String code = ((EditText) root.findViewById(R.id.codeField)).getText().toString();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String clusterName = ((EditText) root.findViewById(R.id.createField)).getText().toString();
+                String code = ((EditText) root.findViewById(R.id.codeField)).getText().toString();
                 if (code.isEmpty() || clusterName.isEmpty()) {
                     //Send Invalid here
                     return;
@@ -56,6 +59,7 @@ public class CreateFragment extends Fragment {
 
                 else {
                     Map<String, Object> data = new HashMap<>();
+                    data.put("token", user.getIdToken(true));
                     data.put("active", true);
                     data.put("name", clusterName);
                     data.put("password", code);
@@ -75,9 +79,14 @@ public class CreateFragment extends Fragment {
                 .continueWith(new Continuation<HttpsCallableResult, String>() {
                     @Override
                     public String then(@NonNull Task<HttpsCallableResult> task) throws Exception {
-                        String result = (String) task.getResult().getData();
-                        Log.wtf("YEET", result);
-                        return result;
+                        try {
+                            String result = (String) task.getResult().getData();
+                            Log.wtf("YEET", result);
+                            return result;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        return "";
                     }
                 });
 
