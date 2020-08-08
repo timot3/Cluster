@@ -1,6 +1,5 @@
 const { admin, db } = require('../helpers/admin');
 
-
 exports.createQuestion = (req, res) => {
     const newQuestion = {
         answerChoices: req.body.answerChoices,

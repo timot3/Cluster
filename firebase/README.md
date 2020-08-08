@@ -47,12 +47,30 @@ json input
   "prompt": "prompt of question",
   "meetingId": "id of meeting for which this is being added to",
   "type": "type of input expected",
-  submissionType: "submission types accepted",
+  "submissionType": "submission types accepted",
 }
 ```
 
 ## Get question
 url: https://us-central1-cluster-hackathon-group.cloudfunctions.net/api/questions/:uid where ":uid" is the id of a given question
+
+GET request
+
+Probably should add some authentication to this. No input.
+
+## Create meeting
+url: https://us-central1-cluster-hackathon-group.cloudfunctions.net/api/meetings
+
+json input
+```
+{
+  "active": true,
+  "questions": ["array of question uid's"]
+}
+```
+
+## Get meeting
+url: https://us-central1-cluster-hackathon-group.cloudfunctions.net/api/meetings/:uid where ":uid" is the id of a given meeting
 
 GET request
 
