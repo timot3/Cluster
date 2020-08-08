@@ -12,5 +12,5 @@
 /captures
 .externalNativeBuild
 .cxx
-**/Secrets/
+**/**/Secrets/
 **/google-services.json
