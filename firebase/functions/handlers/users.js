@@ -100,3 +100,21 @@ exports.signup = (req, res) => {
         }
     });
 };
+
+exports.getUserInfo = (req, res) => {
+    let userData = {};
+    db.doc(`/users/${req.params.uid}`).get().then(doc => {
+        if(!doc.exists)
+            return res.status(404).json({ error: 'Location not found' });
+
+        userData = doc.data();
+        userData.uid = doc.id;
+        return db.collection('users').where('uid', '==', req.params.uid).get();
+    }).then(data => {
+
+        return res.json(userData);
+    }).catch(err => {
+        console.error(err);
+        return res.status(500).json({ error: err.code });
+    });
+};
