@@ -1,4 +1,5 @@
 const { admin, db } = require('../helpers/admin');
+const { makeId } = require('../helpers/helper');
 
 exports.createNewCluster = (req, res) => {
     const newCluster = {
@@ -8,6 +9,7 @@ exports.createNewCluster = (req, res) => {
         name: req.body.name,
         ownerEmail: req.user.email,
         password: req.body.password,
+        joinCode: makeId(5)
     };
 
     db.collection('clusters').add(newCluster).

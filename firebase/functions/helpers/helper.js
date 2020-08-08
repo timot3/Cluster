@@ -7,6 +7,15 @@ const helperRand = (c) => {
   return v.toString(16);
 }
 
+const makeId = (length) => {
+   var result           = '';
+   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+   var charactersLength = characters.length;
+   for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+   }
+   return result;
+}
 
 const isEmpty = string => {
     if(string.trim() === '')

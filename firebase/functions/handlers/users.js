@@ -91,3 +91,7 @@ exports.getUserInfo = (req, res) => {
         return res.status(500).json({ error: err.code });
     });
 };
+
+/*
+Hi, my team is struggling getting realtime updates from Firestore in our Android app. Do you think you could help us?
+*/
