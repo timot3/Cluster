@@ -14,9 +14,11 @@
         android:hint="Name"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.188"
-        tools:layout_editor_absoluteX="100dp" />
+        app:layout_constraintVertical_bias="0.214" />
 
     <EditText
         android:id="@+id/new_email_field"
@@ -26,9 +28,11 @@
         android:hint="Email"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/new_name_field"
-        app:layout_constraintVertical_bias="0.169"
-        tools:layout_editor_absoluteX="100dp" />
+        app:layout_constraintVertical_bias="0.125" />
 
     <EditText
         android:id="@+id/new_password_field"
@@ -38,9 +42,11 @@
         android:hint="Password"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/new_email_field"
-        app:layout_constraintVertical_bias="0.202"
-        tools:layout_editor_absoluteX="100dp" />
+        app:layout_constraintVertical_bias="0.148" />
 
     <EditText
         android:id="@+id/confirm_password_field"
@@ -50,9 +56,11 @@
         android:hint="Confirm Password"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/new_password_field"
-        app:layout_constraintVertical_bias="0.273"
-        tools:layout_editor_absoluteX="100dp" />
+        app:layout_constraintVertical_bias="0.204" />
 
     <Button
         android:id="@+id/submit_new_user"
@@ -60,15 +68,21 @@
         android:layout_height="wrap_content"
         android:text="Submit"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/confirm_password_field"
-        app:layout_constraintVertical_bias="0.411"
-        tools:layout_editor_absoluteX="161dp" />
+        app:layout_constraintVertical_bias="0.411" />
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="157dp"
-        android:layout_height="22dp"
+        android:layout_width="214dp"
+        android:layout_height="34dp"
         android:text="Create New Account"
-        tools:layout_editor_absoluteX="127dp"
-        tools:layout_editor_absoluteY="47dp" />
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="113dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
