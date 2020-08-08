@@ -10,7 +10,8 @@ import android.os.StrictMode;
 import android.view.View;
 import android.widget.EditText;
 
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -38,16 +39,9 @@ public class MainActivity extends AppCompatActivity {
         AuthUser = FirebaseAuth.getInstance();
         setLoginDialog();
 
-        createRequest();
     }
 
-    private void createRequest() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
 
-    }
 
     public void onSignInClick(View v) {
 
@@ -99,4 +93,6 @@ public class MainActivity extends AppCompatActivity {
             alertDialog.show();
         });
     }
+
+
 }
