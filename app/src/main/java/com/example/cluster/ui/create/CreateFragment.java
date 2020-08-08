@@ -1,4 +1,4 @@
-package com.example.cluster.ui.dashboard;
+package com.example.cluster.ui.create;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.cluster.R;
 
-public class JoinFragment extends Fragment {
+public class CreateFragment extends Fragment {
 
-    private JoinViewModel joinViewModel;
+    private CreateViewModel createViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        joinViewModel =
-                ViewModelProviders.of(this).get(JoinViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_join, container, false);
-        final TextView textView = root.findViewById(R.id.text_dashboard);
-        joinViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        createViewModel =
+                ViewModelProviders.of(this).get(CreateViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_create, container, false);
+        final TextView textView = root.findViewById(R.id.text_notifications);
+        createViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

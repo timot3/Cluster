@@ -1,4 +1,4 @@
-package com.example.cluster.ui.home;
+package com.example.cluster.ui.clusters;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

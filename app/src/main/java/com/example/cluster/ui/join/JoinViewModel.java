@@ -1,4 +1,4 @@
-package com.example.cluster.ui.dashboard;
+package com.example.cluster.ui.join;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -10,7 +10,7 @@ public class JoinViewModel extends ViewModel {
 
     public JoinViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is dashboard fragment");
+        mText.setValue("This is join fragment");
     }
 
     public LiveData<String> getText() {
