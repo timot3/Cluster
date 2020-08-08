@@ -2,6 +2,7 @@ package com.example.cluster.ui.clusters;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,13 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.cluster.Lobby;
 import com.example.cluster.R;
 import com.example.cluster.StudentViewCluster;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.List;
 
 public class ClustersFragment extends Fragment {
 
@@ -38,6 +46,22 @@ public class ClustersFragment extends Fragment {
         //Setting adapter
         ListView listView = (ListView) root.findViewById(R.id.lstMain);
         listView.setAdapter(adapter);
+
+        FirebaseFirestore.getInstance()
+                .collection("clusters")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            List<DocumentSnapshot> myListOfDocuments = task.getResult().getDocuments();
+                            for (int i = 0; i < myListOfDocuments.size(); i++) {
+                                String clusterName = myListOfDocuments.get(i).getString("name");
+                                Log.wtf("bruh", clusterName);
+                            }
+                        }
+                    }
+                });
 
         //Setting items to be clickable
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
