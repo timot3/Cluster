@@ -45,6 +45,7 @@ json input
 {
   "answerChoices": ["array of answer choices"],
   "prompt": "prompt of question",
+  "meetingId": "id of meeting for which this is being added to",
   "type": "type of input expected",
   submissionType: "submission types accepted",
 }
