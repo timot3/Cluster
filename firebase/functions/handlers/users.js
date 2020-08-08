@@ -1,5 +1,6 @@
 const firebase = require('firebase');
 const config = require('../config/config');
+const { admin, db } = require('../helpers/admin');
 const { createRandID, validateSignUpData } = require('../helpers/helper');
 
 firebase.initializeApp(config);
@@ -56,21 +57,15 @@ firebase.initializeApp(config);
 exports.signup = (req, res) => {
     const newUser = {
         firstName: req.body.firstName,
-        lastName: req.body.lastName,
         email: req.body.email,
         password: req.body.password,
         confirmPassword: req.body.confirmPassword,
         handle: req.body.handle,
-        tags: req.body.tags,
-        eventsWorked: req.body.eventsWorked,
-        currentEvents: req.body.currentEvents
     };
 
-    const { valid, errors } = validateSignUpData(newUser);
-    if(!valid)
-        return res.status(400).json(errors);
-
-    const noImg = 'no-img.png'
+    // const { valid, errors } = validateSignUpData(newUser);
+    // if(!valid)
+    //     return res.status(400).json(errors);
 
     let token, userId;
 
@@ -89,12 +84,7 @@ exports.signup = (req, res) => {
             handle: newUser.handle,
             email: newUser.email,
             firstName: newUser.firstName,
-            lastName: newUser.lastName,
-            tags: newUser.tags,
-            eventsWorked: req.body.eventsWorked,
-            currentEvents: req.body.currentEvents,
             createdAt: new Date().toISOString(),
-            imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${noImg}?alt=media`,
             userId
         };
 

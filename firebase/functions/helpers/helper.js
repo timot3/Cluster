@@ -42,8 +42,10 @@ exports.validateSignUpData = (data) => {
     // if(isEmpty(data.lastName))
     //     errors.lastName = 'Must not be empty';
 
-    return {
-        errors,
-        valid: Object.keys(errors).length === 0 ? true : false
-    }
+    // return {
+    //     errors,
+    //     valid: Object.keys(errors).length === 0 ? true : false
+    // }
+
+    return true;
 };
