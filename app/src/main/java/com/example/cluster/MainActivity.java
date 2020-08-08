@@ -48,6 +48,11 @@ public class MainActivity extends AppCompatActivity {
         String email = ((EditText) findViewById(R.id.emailField)).getText().toString();
         String password = ((EditText) findViewById(R.id.PasswordField)).getText().toString();
 
+        if (email.isEmpty() || password.isEmpty()) {
+            sendInvalidAlert();
+            return;
+        }
+
         loginDialog.show();
         AuthUser.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
