@@ -49,8 +49,6 @@ public class ClustersFragment extends Fragment {
             }
 
         });
-
-
         return root;
     }
 }

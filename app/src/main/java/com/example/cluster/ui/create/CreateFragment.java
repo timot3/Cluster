@@ -13,9 +13,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.cluster.R;
+import com.example.cluster.ui.join.JoinViewModel;
 
 public class CreateFragment extends Fragment {
-
     private CreateViewModel createViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -23,13 +23,15 @@ public class CreateFragment extends Fragment {
         createViewModel =
                 ViewModelProviders.of(this).get(CreateViewModel.class);
         View root = inflater.inflate(R.layout.fragment_create, container, false);
-        final TextView textView = root.findViewById(R.id.text_notifications);
+        //final TextView textView = root.findViewById(R.id.text_d);
         createViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
-                textView.setText(s);
+                //textView.setText(s);
             }
         });
         return root;
+
     }
+
 }
