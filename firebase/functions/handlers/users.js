@@ -10,7 +10,6 @@ exports.signup = (req, res) => {
         name: req.body.name,
         email: req.body.email,
         password: req.body.password,
-        //confirmPassword: req.body.confirmPassword,
     };
 
     // const { valid, errors } = validateSignUpData(newUser);
@@ -18,7 +17,6 @@ exports.signup = (req, res) => {
     //     return res.status(400).json(errors);
 
     let token, userId;
-    //let randName = createRandID();
 
     db.doc(`/users/${req.body.email}`).get().then(doc => {
         if(doc.exists) {
