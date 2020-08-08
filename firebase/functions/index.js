@@ -14,4 +14,3 @@ app.post('/questions', createQuestion)
 app.get('/questions/:uid', getQuestion)
 
 exports.api = functions.https.onRequest(app);
-
