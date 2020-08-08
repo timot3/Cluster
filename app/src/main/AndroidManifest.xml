@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CreateNewUser"></activity>
+        <activity android:name=".StudentViewCluster"></activity>
+        <activity android:name=".CreateNewUser" />
         <activity
             android:name=".Lobby"
             android:label="@string/title_activity_lobby" />
