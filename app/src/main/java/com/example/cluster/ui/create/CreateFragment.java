@@ -1,10 +1,12 @@
 package com.example.cluster.ui.create;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,9 +17,20 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.cluster.R;
 import com.example.cluster.ui.join.JoinViewModel;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.HttpsCallableResult;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CreateFragment extends Fragment {
     private CreateViewModel createViewModel;
+    private FirebaseFunctions functions = FirebaseFunctions.getInstance();
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -37,11 +50,45 @@ public class CreateFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String clusterName = ((EditText) root.findViewById(R.id.createField)).getText().toString();
+                String code = ((EditText) root.findViewById(R.id.codeField)).getText().toString();
+                if (code.isEmpty() || clusterName.isEmpty()) {
+                    //Send Invalid here
+                    return;
+                }
 
+                else {
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("token", user.getIdToken(true));
+                    data.put("active", true);
+                    data.put("name", clusterName);
+                    data.put("password", code);
+                    addCluster(data);
+                }
             }
         });
 
         return root;
+
+    }
+
+    private Task<String> addCluster(Map<String, Object> data) {
+        return functions
+                .getHttpsCallable("createCluster")
+                .call(data)
+                .continueWith(new Continuation<HttpsCallableResult, String>() {
+                    @Override
+                    public String then(@NonNull Task<HttpsCallableResult> task) throws Exception {
+                        try {
+                            String result = (String) task.getResult().getData();
+                            Log.wtf("YEET", result);
+                            return result;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        return "";
+                    }
+                });
 
     }
 

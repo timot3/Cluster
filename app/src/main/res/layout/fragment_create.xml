@@ -7,7 +7,7 @@
     tools:context=".ui.create.CreateFragment">
 
     <EditText
-        android:id="@+id/createFIeld"
+        android:id="@+id/createField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
