@@ -75,19 +75,16 @@ public class CreateNewUser extends AppCompatActivity {
     public void onClickFormatNewUser(String email, String password) {
 
         mAuth.createUserWithEmailAndPassword(email, password)
-        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    Log.d(TAG, "createUserWithEmail:success");
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    updateUI(user);
-                }
-                else {
-                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                    Toast.makeText(CreateNewUser.this, "Authentication failed.",
-                            Toast.LENGTH_SHORT).show();
-                }
+        .addOnCompleteListener(this, task -> {
+            if (task.isSuccessful()) {
+                Log.d(TAG, "createUserWithEmail:success");
+                FirebaseUser user = mAuth.getCurrentUser();
+                updateUI(user);
+            }
+            else {
+                Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                Toast.makeText(CreateNewUser.this, "Authentication failed.",
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -95,7 +92,6 @@ public class CreateNewUser extends AppCompatActivity {
     public void updateUI(FirebaseUser currentUser) {
         String keyId = nDatabase.push().getKey();
         nDatabase.child(keyId).setValue(user);
-        Intent loginIntent = new Intent(this, MainActivity.class);
-        startActivity(loginIntent);
+        finish();
     }
 }
