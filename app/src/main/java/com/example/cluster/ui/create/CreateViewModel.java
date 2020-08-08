@@ -1,16 +1,16 @@
-package com.example.cluster.ui.home;
+package com.example.cluster.ui.create;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class ClustersViewModel extends ViewModel {
+public class CreateViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public ClustersViewModel() {
+    public CreateViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+        mText.setValue("This is create fragment");
     }
 
     public LiveData<String> getText() {
