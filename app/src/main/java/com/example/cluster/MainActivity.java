@@ -8,6 +8,8 @@ import android.os.StrictMode;
 import android.view.View;
 import android.widget.EditText;
 
+import com.google.firebase.auth.FirebaseUser;
+
 import java.sql.Connection;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,6 +19,10 @@ public class MainActivity extends AppCompatActivity {
      * LOGIN SCREEN
      * @param savedInstanceState
      */
+
+
+    private FirebaseUser mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
