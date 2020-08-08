@@ -3,6 +3,7 @@ const { admin, db } = require('../helpers/admin');
 
 exports.createQuestion = (req, res) => {
     const newQuestion = {
+        answerChoices: req.body.answerChoices,
         prompt: req.body.prompt,
         type: req.body.type,
         submissionType: req.body.submissionType,
@@ -18,5 +19,23 @@ exports.createQuestion = (req, res) => {
     }).catch(err => {
         res.status(500).json({ error: `something went wrong` });
         console.error(err);
+    });
+};
+
+exports.getQuestion = (req, res) => {
+    let questionData = {};
+    db.doc(`/questions/${req.params.uid}`).get().then(doc => {
+        if(!doc.exists)
+            return res.status(404).json({ error: 'Question not found' });
+
+        questionData = doc.data();
+        questionData.uid = doc.id;
+        return db.collection('questions').where('uid', '==', req.params.uid).get();
+    }).then(data => {
+
+        return res.json(questionData);
+    }).catch(err => {
+        console.error(err);
+        return res.status(500).json({ error: err.code });
     });
 };
