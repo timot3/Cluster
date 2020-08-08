@@ -2,6 +2,14 @@ const { admin, db } = require('../helpers/admin');
 const { makeId } = require('../helpers/helper');
 
 exports.createNewCluster = (req, res) => {
+    var length = 5;
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    
     const newCluster = {
         active: req.body.active,
         meetings: [],
@@ -9,7 +17,7 @@ exports.createNewCluster = (req, res) => {
         name: req.body.name,
         ownerEmail: req.user.email,
         password: req.body.password,
-        joinCode: makeId(5)
+        joinCode: result,
     };
 
     db.collection('clusters').add(newCluster).
