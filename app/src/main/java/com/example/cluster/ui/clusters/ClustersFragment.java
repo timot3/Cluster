@@ -39,6 +39,9 @@ public class ClustersFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_clusters, container, false);
 
         //Values that we will get from firebase user
+        String[] clusters = {"PHYS 214", "CS 125", "eSports 360 (Owner)"};
+
+        /**
         FirebaseFirestore.getInstance()
                 .collection("clusters")
                 .get()
@@ -53,8 +56,19 @@ public class ClustersFragment extends Fragment {
                                 values.add(name);
                             }
 
-                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                                    getContext(), android.R.layout.simple_list_item_1, values);
+                            ArrayAdapter<String> adapter;
+                            if (values == null) {
+                                adapter =  new ArrayAdapter<String>(
+                                        getContext(), android.R.layout.simple_list_item_1, clusters);
+                            }
+                            else if (values.size() == 0) {
+                                adapter = new ArrayAdapter<String>(
+                                        getContext(), android.R.layout.simple_list_item_1, clusters);
+                            }
+                            else {
+                                adapter =  new ArrayAdapter<String>(
+                                        getContext(), android.R.layout.simple_list_item_1, values);
+                            }
 
                             //Setting adapter
                             ListView listView = (ListView) root.findViewById(R.id.lstMain);
@@ -75,8 +89,26 @@ public class ClustersFragment extends Fragment {
                     }
                 });
 
-        String[] clusters = {"PHYS 214", "CS 125", "eSports 360 (Owner)"};
 
+         */
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                getContext(), android.R.layout.simple_list_item_1, clusters);
+
+        //Setting adapter
+        ListView listView = (ListView) root.findViewById(R.id.lstMain);
+        listView.setAdapter(adapter);
+
+        //Setting items to be clickable
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView <? > arg0, View view, int position, long id) {
+                Intent i = new Intent(getActivity(), StudentViewCluster.class);
+                i.putExtra("Cluster", clusters[position]);
+                startActivity(i);
+            }
+
+        });
         return root;
     }
 
