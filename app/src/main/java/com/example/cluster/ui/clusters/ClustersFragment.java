@@ -1,9 +1,7 @@
 package com.example.cluster.ui.clusters;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,15 +15,6 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.cluster.R;
 import com.example.cluster.StudentViewCluster;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ClustersFragment extends Fragment {
 
@@ -92,8 +81,7 @@ public class ClustersFragment extends Fragment {
 
          */
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                getContext(), android.R.layout.simple_list_item_1, clusters);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, clusters);
 
         //Setting adapter
         ListView listView = (ListView) root.findViewById(R.id.lstMain);
