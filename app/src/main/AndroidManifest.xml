@@ -11,7 +11,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SettingsViewCluster"></activity>
+        <activity android:name=".SettingsAbout"></activity>
+        <activity android:name=".SettingsChangePassword" />
+        <activity android:name=".SettingsChangeName" />
+        <activity android:name=".SettingsViewCluster" />
         <activity android:name=".StudentViewCluster" />
         <activity android:name=".CreateNewUser" />
         <activity

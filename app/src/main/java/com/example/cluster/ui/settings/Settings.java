@@ -13,6 +13,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import com.example.cluster.SettingsAbout;
+import com.example.cluster.SettingsChangeName;
+import com.example.cluster.SettingsChangePassword;
 import com.example.cluster.SettingsViewCluster;
 
 import com.example.cluster.R;
@@ -44,9 +48,32 @@ public class Settings extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView <? > arg0, View view, int position, long id) {
+                switch(position) {
+                    // change name
+                    case 0:
+                        Intent i1 = new Intent(getActivity(), SettingsChangeName.class);
+                        i1.putExtra("SettingsNameSwitch", settings[position]);
+                        startActivity(i1);
+                        break;
+                    // change password
+                    case 1:
+                        Intent i2 = new Intent(getActivity(), SettingsChangePassword.class);
+                        i2.putExtra("SettingsPasswordSwitch", settings[position]);
+                        startActivity(i2);
+                        break;
+                    // about
+                    case 2:
+                        Intent i3 = new Intent(getActivity(), SettingsAbout.class);
+                        i3.putExtra("SettingsAbout", settings[position]);
+                        startActivity(i3);
+                        break;
+                }
+
+                /*
                 Intent i = new Intent(getActivity(), SettingsViewCluster.class);
                 i.putExtra("Settings", settings[position]);
                 startActivity(i);
+                */
             }
 
         });
