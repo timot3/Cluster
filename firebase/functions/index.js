@@ -13,7 +13,7 @@ app.post('/login', login);
 
 app.post('/createCluster', FBAuth, createNewCluster);
 app.get('/clusters/:uid', getCluster);
-app.post('/joinClusterCode/:uid', joinClusterByCode);
+app.post('/joinClusterCode/:uid', FBAuth, joinClusterByCode);
 
 app.post('/questions', createQuestion);
 app.get('/questions/:uid', getQuestion);
