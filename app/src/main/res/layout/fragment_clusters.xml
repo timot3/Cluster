@@ -8,8 +8,8 @@
 
     <ListView
         android:id="@+id/lstMain"
-        android:layout_width="349dp"
-        android:layout_height="510dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:clickable="true"
         android:contextClickable="false"
         android:focusable="false"
