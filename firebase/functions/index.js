@@ -2,7 +2,7 @@ const app = require('express')();
 const functions = require('firebase-functions');
 const FBAuth = require('./helpers/fbAuth');
 const { signup, login, getUserInfo } = require('./handlers/users');
-const { createNewCluster } = require('./handlers/clusters');
+const { createNewCluster, getCluster, joinClusterByCode } = require('./handlers/clusters');
 const { createQuestion, getQuestion } = require('./handlers/questions');
 const { createMeeting, getMeeting } = require('./handlers/meetings');
 
@@ -12,6 +12,8 @@ app.post('/signup', signup);
 app.post('/login', login);
 
 app.post('/createCluster', FBAuth, createNewCluster);
+app.get('/clusters/:uid', getCluster);
+app.post('/joinClusterCode/:uid', joinClusterByCode);
 
 app.post('/questions', createQuestion);
 app.get('/questions/:uid', getQuestion);
