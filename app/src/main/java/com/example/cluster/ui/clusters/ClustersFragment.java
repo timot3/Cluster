@@ -157,6 +157,8 @@ public class ClustersFragment extends Fragment {
                                     list.add(clusterName);
                             }
 
+                            //Find a way to sort the list so that the Owners are first, then
+                            // the members
                             ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
                                     android.R.layout.simple_list_item_1, list);
 

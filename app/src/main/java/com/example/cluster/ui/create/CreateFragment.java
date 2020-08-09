@@ -21,9 +21,11 @@ import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.HttpsCallableResult;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,11 +61,13 @@ public class CreateFragment extends Fragment {
 
                 else {
                     Map<String, Object> data = new HashMap<>();
-                    data.put("token", user.getIdToken(true));
                     data.put("active", true);
                     data.put("name", clusterName);
-                    data.put("password", code);
-                    addCluster(data);
+                    data.put("joinCluster", code);
+                    data.put("members", new ArrayList<>());
+                    data.put("meetings", new ArrayList<>());
+                    data.put("ownerEmail", FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                    addToFireBase(data);
                 }
             }
         });
@@ -72,24 +76,9 @@ public class CreateFragment extends Fragment {
 
     }
 
-    private Task<String> addCluster(Map<String, Object> data) {
-        return functions
-                .getHttpsCallable("createCluster")
-                .call(data)
-                .continueWith(new Continuation<HttpsCallableResult, String>() {
-                    @Override
-                    public String then(@NonNull Task<HttpsCallableResult> task) throws Exception {
-                        try {
-                            String result = (String) task.getResult().getData();
-                            Log.wtf("YEET", result);
-                            return result;
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        return "";
-                    }
-                });
-
+    private void addToFireBase(Map<String, Object> data) {
+        FirebaseFirestore.getInstance().collection("clusters")
+                .add(data);
     }
 
 }
