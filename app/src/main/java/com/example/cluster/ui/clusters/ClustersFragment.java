@@ -21,6 +21,7 @@ import com.example.cluster.StudentViewCluster;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -36,6 +37,7 @@ import java.util.concurrent.ExecutionException;
 public class ClustersFragment extends Fragment {
 
     private ClustersViewModel clustersViewModel;
+    private String userEmail;
 
     private ListView listView;
 
@@ -48,6 +50,7 @@ public class ClustersFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_clusters, container, false);
 
         listView = (ListView) root.findViewById(R.id.lstMain);
+        userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         new MyTask().execute();
 
         //Values that we will get from firebase user
@@ -130,9 +133,28 @@ public class ClustersFragment extends Fragment {
                         ArrayList<String> list = new ArrayList<>();
                         if (task.isComplete()) {
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                                String name = documentSnapshot.getString("name");
-                                if (name != null)
-                                    list.add(name);
+
+                                //Look if user owns the cluster
+                                String clusterName = documentSnapshot.getString("name");
+                                String ownerEmail = documentSnapshot.getString("ownerEmail");
+                                List<String> members = (List<String>) documentSnapshot.get("members");
+                                boolean isMember = false;
+                                //First check if its a owner
+                                if (ownerEmail.equals(userEmail)) {
+                                    list.add(clusterName + " (Owner)");
+                                    continue;
+                                }
+                                //Then member
+                                for (String m : members) {
+                                    if (m.equals(userEmail)) {
+                                        isMember = true;
+                                        break;
+                                    }
+                                }
+
+                                //Yes add to list, otherwise don't add it
+                                if (isMember)
+                                    list.add(clusterName);
                             }
 
                             ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
