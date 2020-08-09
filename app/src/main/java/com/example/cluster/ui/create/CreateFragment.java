@@ -1,5 +1,7 @@
 package com.example.cluster.ui.create;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,9 +21,12 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.cluster.R;
 import com.example.cluster.ui.join.JoinViewModel;
 import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.HttpsCallableResult;
@@ -34,8 +40,10 @@ public class CreateFragment extends Fragment {
     private FirebaseFunctions functions = FirebaseFunctions.getInstance();
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
         createViewModel =
                 ViewModelProviders.of(this).get(CreateViewModel.class);
         View root = inflater.inflate(R.layout.fragment_create, container, false);
@@ -52,6 +60,8 @@ public class CreateFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 String clusterName = ((EditText) root.findViewById(R.id.createField)).getText().toString();
                 String code = ((EditText) root.findViewById(R.id.codeField)).getText().toString();
                 if (code.isEmpty() || clusterName.isEmpty()) {
@@ -69,6 +79,7 @@ public class CreateFragment extends Fragment {
                     data.put("ownerEmail", FirebaseAuth.getInstance().getCurrentUser().getEmail());
                     addToFireBase(data);
                 }
+
             }
         });
 
@@ -78,7 +89,18 @@ public class CreateFragment extends Fragment {
 
     private void addToFireBase(Map<String, Object> data) {
         FirebaseFirestore.getInstance().collection("clusters")
-                .add(data);
+                .add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                Toast.makeText(getContext(), "Cluster created", Toast.LENGTH_SHORT).show();
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(), "Failed to create Cluster", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }
