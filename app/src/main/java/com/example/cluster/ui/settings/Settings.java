@@ -51,22 +51,22 @@ public class Settings extends Fragment {
             @Override
             public void onItemClick(AdapterView <? > arg0, View view, int position, long id) {
                 switch(position) {
-                    // change name
+                    // about
                     case 0:
-                        Intent i1 = new Intent(getActivity(), SettingsChangeName.class);
-                        i1.putExtra("SettingsNameSwitch", settings[position]);
+                        Intent i1 = new Intent(getActivity(), SettingsAbout.class);
+                        i1.putExtra("SettingsAbout", settings[position]);
                         startActivity(i1);
                         break;
-                    // change password
+                    // change name
                     case 1:
-                        Intent i2 = new Intent(getActivity(), SettingsChangePassword.class);
-                        i2.putExtra("SettingsPasswordSwitch", settings[position]);
+                        Intent i2 = new Intent(getActivity(), SettingsChangeName.class);
+                        i2.putExtra("SettingsUserSwitch", settings[position]);
                         startActivity(i2);
                         break;
-                    // about
+                    // change password
                     case 2:
-                        Intent i3 = new Intent(getActivity(), SettingsAbout.class);
-                        i3.putExtra("SettingsAbout", settings[position]);
+                        Intent i3 = new Intent(getActivity(), SettingsChangePassword.class);
+                        i3.putExtra("SettingsPasswordSwitch", settings[position]);
                         startActivity(i3);
                         break;
                 }
