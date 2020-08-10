@@ -26,8 +26,26 @@ public class MyListAdapter extends ArrayAdapter<String> {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView = inflater.inflate(R.layout.row, null, true);
 
-        TextView textView = (TextView) rowView.findViewById(R.id.clusterName);
-        textView.setText(clusterNames.get(position));
+        TextView cluster = (TextView) rowView.findViewById(R.id.clusterName);
+
+        String clusterTitle = "";
+        if (clusterNames.get(position).contains("(Owner)")) {
+            for (int i = 0; i < clusterNames.get(position).length(); i++) {
+                if (clusterNames.get(position).charAt(i) == '(') {
+                    clusterTitle = clusterNames.get(position).substring(0, i);
+                    break;
+                }
+            }
+            cluster.setText(clusterTitle);
+        }
+        else
+            cluster.setText(clusterNames.get(position));
+
+        TextView memberStatus = (TextView) rowView.findViewById(R.id.memberStatus);
+        if (clusterNames.get(position).contains("(Owner)"))
+            memberStatus.setText("Owner");
+        else
+            memberStatus.setText("Member");
 
         return rowView;
     }

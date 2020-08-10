@@ -146,6 +146,7 @@ public class ClustersFragment extends Fragment {
                     .get()
                     .addOnCompleteListener(task -> {
                         ArrayList<String> list = new ArrayList<>();
+                        ArrayList<String> memberStatus = new ArrayList<>();
                         if (task.isComplete()) {
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
 
