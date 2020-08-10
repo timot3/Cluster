@@ -40,6 +40,7 @@ public class Settings extends Fragment {
         //Values that we will get from firebase user
         String[] settings = {"About", "Change Name", "Change Password"};
 
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, settings);
 
         //Setting adapter
