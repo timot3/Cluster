@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.cluster.Lobby;
+import com.example.cluster.MyListAdapter;
 import com.example.cluster.R;
 import com.example.cluster.StudentViewCluster;
 import com.example.cluster.TeacherView;
@@ -176,8 +177,7 @@ public class ClustersFragment extends Fragment {
                             this.sortList(list);
                             // Sort before adapter
 
-                            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
-                                    android.R.layout.simple_list_item_1, list);
+                            MyListAdapter adapter = new MyListAdapter(getActivity(), list);
 
                             listView.setAdapter(adapter);
 
