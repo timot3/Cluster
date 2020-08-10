@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.cluster.Lobby;
 import com.example.cluster.R;
 import com.example.cluster.StudentViewCluster;
+import com.example.cluster.TeacherView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -183,7 +184,12 @@ public class ClustersFragment extends Fragment {
                             listView.setOnItemClickListener((parent, view, position, id) -> {
 
                                 //This is where we can choose what view works
-                                Intent i = new Intent(getActivity(), StudentViewCluster.class);
+                                Intent i;
+                                if (list.get(position).contains("Owner")) {
+                                    i =  new Intent(getActivity(), TeacherView.class);
+                                } else {
+                                    i = new Intent(getActivity(), StudentViewCluster.class);
+                                }
                                 i.putExtra("Cluster", list.get(position));
                                 startActivity(i);
                             });

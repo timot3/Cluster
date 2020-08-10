@@ -8,6 +8,7 @@
 
 
     <com.google.android.material.tabs.TabLayout
+        android:id="@+id/TeacherTabLayout"
         android:layout_width="409dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -16,16 +17,27 @@
         app:layout_constraintVertical_bias="0.001">
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/promptTab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Prompt" />
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/responsesTab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Responses" />
 
     </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TeacherTabLayout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
