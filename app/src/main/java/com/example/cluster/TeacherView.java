@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -20,6 +21,20 @@ public class TeacherView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_view);
 
+
+        Intent intent = getIntent();
+        String name = intent.getStringExtra("Cluster");
+        String title = "";
+        for (int i = 0; i < name.length(); i++) {
+            if (name.charAt(i) == '(') {
+                title = name.substring(0, i);
+                break;
+            }
+        }
+
+        setTitle(title);
+
+
         TabLayout tabLayout = (TabLayout) findViewById(R.id.TeacherTabLayout);
         TabItem tabPrompt = (TabItem) findViewById(R.id.promptTab);
         TabItem tabResponses = (TabItem) findViewById(R.id.responsesTab);
@@ -29,7 +44,7 @@ public class TeacherView extends AppCompatActivity {
         TeacherViewAdapter adapter = new TeacherViewAdapter(getSupportFragmentManager(),
                 tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
-        
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
