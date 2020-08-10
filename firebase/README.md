@@ -52,7 +52,7 @@ Probably should add some authentication to this. No input.
 ## Create question
 url: https://us-central1-cluster-hackathon-group.cloudfunctions.net/api/questions
 
-json input
+json input:
 ```
 {
   "answerChoices": ["array of answer choices"],
@@ -72,10 +72,27 @@ GET request
 
 Probably should add some authentication to this. No input.
 
+## Answer question
+url: https://us-central1-cluster-hackathon-group.cloudfunctions.net/api/answerQuestion
+
+POST request
+
+json input:
+```
+{
+  "question": "uid of question being answered",
+  "answer": "user's answer"
+}
+```
+
+MUST BE AUTHENTICATED - a user token needs to be added as a header (key = Authorization, value = "Bearer KEY"). Keys are returned when a user signs up, although I think they expire at some point (60 mins?).
+
+Saves answer into the question object in the userAnswer array in the format "email - answer". Currently does not check for duplicates meaning a single user could have multiple answers.  
+
 ## Create meeting
 url: https://us-central1-cluster-hackathon-group.cloudfunctions.net/api/meetings
 
-json input
+json input:
 ```
 {
 	"cluster": "unique id of cluster associated",

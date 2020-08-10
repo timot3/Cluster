@@ -16,7 +16,7 @@ exports.createQuestion = (req, res) => {
       return;
     }).catch(err => {
       console.error(err);
-      res.json({ error: "meeting probably doesn't exist" });
+      res.json({ error: "Meeting probably doesn't exist" });
     });
 
     db.collection('questions').add(newQuestion).
@@ -38,11 +38,11 @@ exports.createQuestion = (req, res) => {
           console.log(err)
         });
 
-        res.json({ message: `question ${doc.id} created successfully` });
+        res.json({ message: `Question ${doc.id} created successfully` });
         //res.json(oldData);
         return;
     }).catch(err => {
-        res.status(500).json({ error: "something went wrong" });
+        res.status(500).json({ error: "Something went wrong" });
         console.error(err);
     });
 };
@@ -64,3 +64,16 @@ exports.getQuestion = (req, res) => {
         return res.status(500).json({ error: err.code });
     });
 };
+
+exports.answerQuestion = (req, res) => {
+  var newItm = `${req.user.email} - ${req.body.answer}`;
+
+  var newJson = {};
+  newJson[req.user.email] = req.body.answer;
+
+  db.collection('questions').doc(req.body.question).update({
+    userAnswers: admin.firestore.FieldValue.arrayUnion(newItm)
+  });
+
+  return res.json({ success: "successful submission" });
+}
