@@ -1,19 +1,43 @@
 const { admin, db } = require('../helpers/admin');
 
+// I assume the user logged in is owner
 exports.createMeeting = (req, res) => {
     const newMeeting = {
+        cluster: req.body.cluster,
         active: req.body.active,
-        questions: req.body.questions
+        questions: []
     };
+
+    var oldData = {};
+
+    db.doc(`/clusters/${req.body.cluster}`).get().then(doc => {
+      oldData = doc.data().meetings;
+      return;
+    }).catch(err => {
+      console.error(err);
+      res.json({ error: "cluster probably doesn't exist" });
+    });
 
     db.collection('meetings').add(newMeeting).
     then(doc => {
         const resMeeting = newMeeting;
         resMeeting.meetingId = doc.id;
+
+        // Add ID to user clusters array
+        oldData.push(resMeeting.meetingId);
+
+        var newJson = {};
+        newJson['meetings'] = oldData;
+
+        // Edit clusters of user to include new cluster ID
+        db.collection('clusters').doc(req.body.cluster).update(newJson).catch(err => {
+          console.log(err)
+        });
+
         res.json({ message: `meeting ${doc.id} created successfully` });
         return;
     }).catch(err => {
-        res.status(500).json({ error: `something went wrong` });
+        res.status(500).json({ error: `something went wrong - does the given cluster exist and is the current user the owner?` });
         console.error(err);
     });
 };

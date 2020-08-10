@@ -10,14 +10,39 @@ exports.createQuestion = (req, res) => {
         userAnswers: []
     };
 
+    var oldData = {};
+    db.doc(`/meetings/${req.body.meetingId}`).get().then(doc => {
+      oldData = doc.data().questions;
+      return;
+    }).catch(err => {
+      console.error(err);
+      res.json({ error: "meeting probably doesn't exist" });
+    });
+
     db.collection('questions').add(newQuestion).
     then(doc => {
         const resQuestion = newQuestion;
         resQuestion.questionId = doc.id;
+
+        // Add ID to user clusters array
+        if(oldData.length > 0)
+          oldData.push(resQuestion.questionId);
+        else
+          oldData = [resQuestion.questionId];
+
+        var newJson = {};
+        newJson['questions'] = oldData;
+
+        // Edit clusters of user to include new cluster ID
+        db.collection('meetings').doc(req.body.meetingId).update(newJson).catch(err => {
+          console.log(err)
+        });
+
         res.json({ message: `question ${doc.id} created successfully` });
+        //res.json(oldData);
         return;
     }).catch(err => {
-        res.status(500).json({ error: `something went wrong` });
+        res.status(500).json({ error: "something went wrong" });
         console.error(err);
     });
 };

@@ -18,7 +18,7 @@ app.post('/joinClusterCode/:uid', FBAuth, joinClusterByCode);
 app.post('/questions', createQuestion);
 app.get('/questions/:uid', getQuestion);
 
-app.post('/meetings', createMeeting);
+app.post('/meetings', FBAuth, createMeeting);
 app.get('/meetings/:uid', getMeeting);
 
 exports.api = functions.https.onRequest(app);

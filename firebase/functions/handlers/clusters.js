@@ -23,6 +23,16 @@ exports.createNewCluster = (req, res) => {
         joinCode: result,
     };
 
+    let oldData = [];
+
+    db.doc(`/users/${req.user.email}`).get().then(doc => {
+      if(doc.data().hasOwnProperty("ownerof"))
+        oldData = doc.data().ownerof;
+      return;
+    }).catch(err => {
+      console.error(err);
+    });
+
     // Create a new document in the cluster collection
     db.collection('clusters').add(newCluster).
     then(doc => {
@@ -37,7 +47,20 @@ exports.createNewCluster = (req, res) => {
           console.log(err)
         });
 
-        res.json({ message: `cluster ${doc.id} created successfully` });
+        if(oldData.length > 0)
+          oldData.push(resCluster.clusterId);
+        else
+          oldData = [resCluster.clusterId];
+
+        var uJson = {};
+        uJson['ownerof'] = oldData;
+
+        // Edit clusters of user to include new cluster ID
+        db.collection('users').doc(req.user.email).update(uJson).catch(err => {
+          console.log(err)
+        });
+
+        res.json({ message: `cluster ${doc.id} created successfully`, shortCode: `${result}` });
         return;
     }).catch(err => {
         res.status(500).json({ error: `something went wrong` });
@@ -68,30 +91,49 @@ exports.getCluster = (req, res) => {
 exports.joinClusterByCode = (req, res) => {
   let clusterData = {};
 
-  let oldData = {};
+  let oldUserData = {};
+  let oldClusterData = {};
 
   db.doc(`/users/${req.user.email}`).get().then(doc => {
-    oldData = doc.data().clusters;
+    oldUserData = doc.data().clusters;
     return;
   }).catch(err => {
     console.error(err);
   });
 
-  db.doc(`/clusters/IDWITHCODES`).get().then(doc => {
+  db.doc(`/joincodes/IDWITHCODES`).get().then(doc => {
       clusterData = doc.data();
       return db.collection('clusters').where('uid', '==', req.params.uid).get();
   }).then(data => {
       if(clusterData.hasOwnProperty(req.params.uid)) {
         let newId = clusterData[req.params.uid];
 
+        db.doc(`/clusters/${newId}`).get().then(doc => {
+          if(doc.data().hasOwnProperty("members"))
+            oldClusterData = doc.data().members;
+          return;
+        }).catch(err => {
+          console.error(err);
+        });
+
         // Add ID to user clusters array
-        oldData.push(newId);
+        oldUserData.push(newId);
+        if(oldClusterData.length > 0)
+          oldClusterData.push(req.user.email);
+        else
+          oldClusterData = [req.user.email];
 
-        var newJson = {};
-        newJson['clusters'] = oldData;
+        var newUserJson = {};
+        var newClusterJson = {};
+        newUserJson['clusters'] = oldUserData;
+        newClusterJson['members'] = oldClusterData;
 
-        // Edit clusters of user to include new cluster ID 
-        db.collection('users').doc(req.user.email).update(newJson).catch(err => {
+        // Edit clusters of user to include new cluster ID
+        db.collection('users').doc(req.user.email).update(newUserJson).catch(err => {
+          console.log(err)
+        });
+
+        db.collection('clusters').doc(newId).update(newClusterJson).catch(err => {
           console.log(err)
         });
 

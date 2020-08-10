@@ -6,6 +6,8 @@ const { createRandID, validateSignUpData } = require('../helpers/helper');
 firebase.initializeApp(config);
 
 exports.signup = (req, res) => {
+  // TODO: convert email to lowercase here so that the document name has no capital letters
+
     const newUser = {
         name: req.body.name,
         email: req.body.email,
@@ -33,7 +35,7 @@ exports.signup = (req, res) => {
             email: newUser.email,
             name: newUser.name,
             clusters: [],
-            ownerOf: [],
+            ownerof: [],
             userId
         };
 
@@ -91,7 +93,3 @@ exports.getUserInfo = (req, res) => {
         return res.status(500).json({ error: err.code });
     });
 };
-
-/*
-Hi, my team is struggling getting realtime updates from Firestore in our Android app. Do you think you could help us?
-*/
