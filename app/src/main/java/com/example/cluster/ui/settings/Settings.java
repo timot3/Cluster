@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
@@ -68,12 +70,6 @@ public class Settings extends Fragment {
                         startActivity(i3);
                         break;
                 }
-
-                /*
-                Intent i = new Intent(getActivity(), SettingsViewCluster.class);
-                i.putExtra("Settings", settings[position]);
-                startActivity(i);
-                */
             }
 
         });

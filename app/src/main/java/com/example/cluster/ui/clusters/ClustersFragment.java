@@ -2,6 +2,7 @@ package com.example.cluster.ui.clusters;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -31,7 +33,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.concurrent.ExecutionException;
 
 public class ClustersFragment extends Fragment {
@@ -121,9 +126,17 @@ public class ClustersFragment extends Fragment {
         return root;
     }
 
+    class SortAlphabetical implements Comparator<String> {
+        public int compare(String a, String b) {
+            String lower_a = a.toLowerCase();
+            String lower_b = b.toLowerCase();
+            return lower_a.compareTo(lower_b);
+        }
+    }
 
     private class MyTask extends AsyncTask<Void, Void, Void> {
 
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         protected Void doInBackground(Void... voids) {
             FirebaseFirestore.getInstance()
@@ -159,6 +172,9 @@ public class ClustersFragment extends Fragment {
 
                             //Find a way to sort the list so that the Owners are first, then
                             // the members
+                            this.sortList(list);
+                            // Sort before adapter
+
                             ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
                                     android.R.layout.simple_list_item_1, list);
 
@@ -175,5 +191,21 @@ public class ClustersFragment extends Fragment {
                     });
             return null;
         }
+
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        protected void sortList(List<String> list) {
+            // Partition, then sort each
+            List<String> owners = list.stream().filter(s -> s.endsWith("(Owner)")).collect(Collectors.toList());
+            List<String> members = list.stream().filter(s-> !(s.endsWith("(Owner)"))).collect(Collectors.toList());
+
+            Comparator<String> sortAlphabetical = new SortAlphabetical();
+            owners.sort(sortAlphabetical);
+            members.sort(sortAlphabetical);
+
+            list.clear();
+            list.addAll(owners);
+            list.addAll(members);
+        }
     }
+
 }
