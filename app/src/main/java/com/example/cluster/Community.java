@@ -1,5 +1,6 @@
 package com.example.cluster;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -91,6 +92,7 @@ public class Community extends Fragment {
         FirebaseFirestore.getInstance().collection("clusters")
                 .get().addOnCompleteListener(task -> {
                     ArrayList<String> clusterNames = new ArrayList<>();
+                    ArrayList<String> clusterIDs = new ArrayList<>();
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                             List<String> members = (List<String>) documentSnapshot.get("members");
@@ -98,12 +100,13 @@ public class Community extends Fragment {
                             for (String member : members) {
                                 if (member.equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())) {
                                     clusterNames.add(documentSnapshot.getString("name"));
+                                    clusterIDs.add(documentSnapshot.getId());
                                     break;
                                 }
                             }
 
-                            //Sort Clusters
-                            Collections.sort(clusterNames);
+                            //Sort Clusters with ID's
+                            //Collections.sort(clusterNames);
 
                             //Connect to listView
                             ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
@@ -115,7 +118,10 @@ public class Community extends Fragment {
                             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                                    Intent i = new Intent(getActivity(), DiscussionBoard.class);
+                                    i.putExtra("title", clusterNames.get(position));
+                                    i.putExtra("clusterID", clusterIDs.get(position));
+                                    startActivity(i);
                                 }
                             });
 

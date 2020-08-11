@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TeacherView"></activity>
+        <activity android:name=".DiscussionBoard"></activity>
+        <activity android:name=".TeacherView" />
         <activity android:name=".SettingsAbout" />
         <activity android:name=".SettingsChangePassword" />
         <activity android:name=".SettingsChangeName" />
