@@ -27,7 +27,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.HttpsCallableResult;
 
@@ -106,6 +109,9 @@ public class CreateFragment extends Fragment {
     }
 
     private void createCommunity(String ID) {
+        FirebaseFirestore.getInstance().collection("community").document(ID)
+                .set(new HashMap<>());
+
         FirebaseFirestore.getInstance().collection("community").document(ID)
                 .collection("posts").add(new HashMap<>());
     }
