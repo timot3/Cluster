@@ -2,11 +2,26 @@ package com.example.cluster;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +29,9 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class Community extends Fragment {
+
+
+    private ListView listView;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,6 +78,51 @@ public class Community extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_community, container, false);
+        listView = (ListView) root.findViewById(R.id.clusterList);
         return root;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstance) {
+        super.onActivityCreated(savedInstance);
+
+
+        //Get Firebase clusters and List them, only allow "Members"
+        FirebaseFirestore.getInstance().collection("clusters")
+                .get().addOnCompleteListener(task -> {
+                    ArrayList<String> clusterNames = new ArrayList<>();
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                            List<String> members = (List<String>) documentSnapshot.get("members");
+                            //See if its a member
+                            for (String member : members) {
+                                if (member.equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())) {
+                                    clusterNames.add(documentSnapshot.getString("name"));
+                                    break;
+                                }
+                            }
+
+                            //Sort Clusters
+                            Collections.sort(clusterNames);
+
+                            //Connect to listView
+                            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
+                                    android.R.layout.simple_list_item_1, clusterNames);
+
+                            listView.setAdapter(adapter);
+
+                            //Create onListener
+                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                                }
+                            });
+
+                        }
+
+
+                    }
+                });
     }
 }
