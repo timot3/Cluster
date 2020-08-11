@@ -43,7 +43,7 @@ public class Lobby extends AppCompatActivity {
         //ADD FRAGMENTS HERE
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_clusters, R.id.navigation_join, R.id.navigation_create,
-                R.id.settings)
+                R.id.settings, R.id.community)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);

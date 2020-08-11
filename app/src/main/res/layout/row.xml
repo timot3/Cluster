@@ -36,7 +36,6 @@
         android:id="@+id/memberStatus"
         android:layout_width="303dp"
         android:layout_height="32dp"
-        android:gravity="center|left"
         android:padding="5dp"
         android:text="Member"
         android:textSize="14sp"
