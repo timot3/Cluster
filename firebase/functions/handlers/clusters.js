@@ -43,7 +43,7 @@ exports.createNewCluster = (req, res) => {
         newJson[result] = doc.id;
 
         // Update the IDWITHCODES document to contain the joinCode - UID pair
-        db.collection('clusters').doc('IDWITHCODES').update(newJson).catch(err => {
+        db.collection('joincodes').doc('IDWITHCODES').update(newJson).catch(err => {
           console.log(err)
         });
 
@@ -59,6 +59,13 @@ exports.createNewCluster = (req, res) => {
         db.collection('users').doc(req.user.email).update(uJson).catch(err => {
           console.log(err)
         });
+
+        const newPostCollection = {
+          question: "New Question",
+          replies: []
+        };
+        db.collection('community').doc(resCluster.clusterId).set({});
+        db.collection('community').doc(resCluster.clusterId).collection('posts').add(newPostCollection).catch(err => console.error(err));
 
         res.json({ message: `cluster ${doc.id} created successfully`, shortCode: `${result}` });
         return;
