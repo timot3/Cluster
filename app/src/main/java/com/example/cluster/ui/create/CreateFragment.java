@@ -93,6 +93,8 @@ public class CreateFragment extends Fragment {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 Toast.makeText(getContext(), "Cluster created", Toast.LENGTH_SHORT).show();
+                String ID = documentReference.getId();
+                createCommunity(ID);
             }
         })
         .addOnFailureListener(new OnFailureListener() {
@@ -103,4 +105,8 @@ public class CreateFragment extends Fragment {
         });
     }
 
+    private void createCommunity(String ID) {
+        FirebaseFirestore.getInstance().collection("community").document(ID)
+                .collection("posts").add(new HashMap<>());
+    }
 }
