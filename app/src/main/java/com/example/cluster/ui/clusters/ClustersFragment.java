@@ -145,8 +145,10 @@ public class ClustersFragment extends Fragment {
                     .collection("clusters")
                     .get()
                     .addOnCompleteListener(task -> {
+
                         ArrayList<String> list = new ArrayList<>();
-                        ArrayList<String> memberStatus = new ArrayList<>();
+                        ArrayList<String> clusterID = new ArrayList<>();
+
                         if (task.isComplete()) {
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
 
@@ -158,12 +160,14 @@ public class ClustersFragment extends Fragment {
                                 //First check if its a owner
                                 if (ownerEmail.equals(userEmail)) {
                                     list.add(clusterName + " (Owner)");
+                                    clusterID.add(documentSnapshot.getId());
                                     continue;
                                 }
                                 //Then member
                                 for (String m : members) {
                                     if (m.equals(userEmail)) {
                                         isMember = true;
+                                        clusterID.add(documentSnapshot.getId());
                                         break;
                                     }
                                 }
@@ -175,7 +179,7 @@ public class ClustersFragment extends Fragment {
 
                             //Find a way to sort the list so that the Owners are first, then
                             // the members
-                            this.sortList(list);
+                            //this.sortList(list);
                             // Sort before adapter
 
                             MyListAdapter adapter = new MyListAdapter(getActivity(), list);
@@ -192,6 +196,7 @@ public class ClustersFragment extends Fragment {
                                     i = new Intent(getActivity(), StudentViewCluster.class);
                                 }
                                 i.putExtra("Cluster", list.get(position));
+                                i.putExtra("ID", clusterID.get(position));
                                 startActivity(i);
                             });
                         }
