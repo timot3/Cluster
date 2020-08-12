@@ -49,7 +49,12 @@ public class DiscussionBoard extends AppCompatActivity {
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                //Add intent here
+                                //Add intent here and pass ID
+                                Intent i = new Intent(DiscussionBoard.this, PostPage.class);
+                                i.putExtra("clusterID", clusterID);
+                                i.putExtra("postID", postID.get(position));
+                                i.putExtra("title", postsTitles.get(position));
+                                startActivity(i);
                             }
                         });
                     }
