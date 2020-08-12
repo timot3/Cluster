@@ -1,9 +1,23 @@
 package com.example.cluster;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DiscussionBoard extends AppCompatActivity {
 
@@ -13,5 +27,32 @@ public class DiscussionBoard extends AppCompatActivity {
         setContentView(R.layout.activity_discussion_board);
         Intent intent = getIntent();
         setTitle(intent.getStringExtra("title"));
+        ListView listView = (ListView) findViewById(R.id.displayList);
+
+        String clusterID = intent.getStringExtra("clusterID");
+        FirebaseFirestore.getInstance().collection("community")
+                .document(clusterID).collection("posts").get()
+                .addOnCompleteListener(task -> {
+                    if (task.isComplete()) {
+                        List<String> postsTitles = new ArrayList<>();
+                        List<String> postID = new ArrayList<>();
+                        for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                            postsTitles.add(documentSnapshot.getString("title"));
+                            postID.add(documentSnapshot.getId());
+                        }
+
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(DiscussionBoard.this,
+                                android.R.layout.simple_list_item_1, postsTitles);
+
+                        listView.setAdapter(adapter);
+
+                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                //Add intent here
+                            }
+                        });
+                    }
+                });
     }
 }
