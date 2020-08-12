@@ -64,7 +64,14 @@ public class DiscussionBoard extends AppCompatActivity {
     public void onCreatePosts(View view) {
         Intent nextScreen = new Intent(this, CreateNewPost.class);
         nextScreen.putExtra("clusterID", getIntent().getStringExtra("clusterID"));
-        startActivity(nextScreen);
+        startActivityForResult(nextScreen, 500);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 500)
+            this.recreate();
     }
 
 }

@@ -34,6 +34,7 @@ public class CreateNewPost extends AppCompatActivity {
         FirebaseFirestore.getInstance().collection("community")
                 .document(getIntent().getStringExtra("clusterID"))
                 .collection("posts").add(data);
+        setResult(500);
         finish();
     }
 }
