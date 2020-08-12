@@ -22,7 +22,7 @@
 
     <item
         android:id="@+id/community"
-        android:icon="@drawable/groups_black_18dp"
+        android:icon="@drawable/ic_forum_black_18dp"
         android:title="Community" />
 </menu>
 
