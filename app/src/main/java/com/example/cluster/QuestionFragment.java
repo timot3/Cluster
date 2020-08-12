@@ -104,6 +104,9 @@ public class QuestionFragment extends Fragment {
                         .document("live")
                         .update("replies", FieldValue.arrayUnion(reply));
 
+                //Figure out how to end fragment
+                getActivity().getSupportFragmentManager().beginTransaction().replace(LivePoll.display,
+                        new WaitingFragment()).commit();
             }
         });
 
