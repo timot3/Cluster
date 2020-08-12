@@ -60,4 +60,11 @@ public class DiscussionBoard extends AppCompatActivity {
                     }
                 });
     }
+
+    public void onCreatePosts(View view) {
+        Intent nextScreen = new Intent(this, CreateNewPost.class);
+        nextScreen.putExtra("clusterID", getIntent().getStringExtra("clusterID"));
+        startActivity(nextScreen);
+    }
+
 }

@@ -3,6 +3,10 @@ package com.example.cluster;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class PostPage extends AppCompatActivity {
 
@@ -11,4 +15,5 @@ public class PostPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_page);
     }
+
 }

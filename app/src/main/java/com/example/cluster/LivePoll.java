@@ -25,6 +25,7 @@ public class LivePoll extends FragmentActivity {
     Handler handler = new Handler();
     Fragment fragment;
     static int display;
+    String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
 
     @Override
@@ -37,7 +38,11 @@ public class LivePoll extends FragmentActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragmentContainer, fragment).commit();
 
-        String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
 
         handler.postDelayed(new Runnable() {
 
@@ -47,8 +52,8 @@ public class LivePoll extends FragmentActivity {
                         .document(getIntent().getStringExtra("ID"))
                         .collection("livepolls")
                         .document("live").get().addOnCompleteListener(task -> {
-                        FragmentTransaction fragmentTransaction = getSupportFragmentManager()
-                                .beginTransaction();
+                    FragmentTransaction fragmentTransaction = getSupportFragmentManager()
+                            .beginTransaction();
                     if (task.isComplete()) {
                         DocumentSnapshot snapshot = task.getResult();
                         String question = snapshot.getString("question");
@@ -83,8 +88,4 @@ public class LivePoll extends FragmentActivity {
 
         }, 1000);
     }
-
-
-
-
 }
