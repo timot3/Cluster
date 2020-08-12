@@ -11,9 +11,11 @@ import android.os.Handler;
 import android.util.Log;
 
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class LivePoll extends FragmentActivity {
@@ -22,6 +24,7 @@ public class LivePoll extends FragmentActivity {
 
     Handler handler = new Handler();
     Fragment fragment;
+    static int display;
 
 
     @Override
@@ -29,11 +32,12 @@ public class LivePoll extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live_poll);
         setTitle("Live Poll");
-
+        display = R.id.fragmentContainer;
         fragment = new WaitingFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragmentContainer, fragment).commit();
 
+        String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
         handler.postDelayed(new Runnable() {
 
@@ -43,25 +47,36 @@ public class LivePoll extends FragmentActivity {
                         .document(getIntent().getStringExtra("ID"))
                         .collection("livepolls")
                         .document("live").get().addOnCompleteListener(task -> {
-                            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        FragmentTransaction fragmentTransaction = getSupportFragmentManager()
+                                .beginTransaction();
                     if (task.isComplete()) {
                         DocumentSnapshot snapshot = task.getResult();
                         String question = snapshot.getString("question");
-                        if (!(question.isEmpty())) {
+                        List<String> emails = (List<String>) snapshot.get("emails");
+                        boolean answered = false;
+
+                        for (String s : emails)
+                            if (s.equals(userEmail))
+                                answered = true;
+
+                        if (!(question.isEmpty()) && !answered) {
                             //Add fragment
                             try {
+                                Bundle bundle = new Bundle();
+                                QuestionFragment questionFragment = new QuestionFragment();
+                                questionFragment.setArguments(bundle);
+                                bundle.putString("ID", getIntent().getStringExtra("ID"));
                                 fragmentTransaction.replace(R.id.fragmentContainer,
-                                        new QuestionFragment());
+                                        questionFragment);
+                                fragmentTransaction.addToBackStack(null);
                                 fragmentTransaction.commit();
 
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
-                        else {
-                            Log.wtf("Bruh", "This ain't it");
+                        else
                             handler.postDelayed(this, 1000);
-                        }
                     }
                 });
             }

@@ -2,11 +2,23 @@ package com.example.cluster;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +71,42 @@ public class QuestionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_question, container, false);
+        View root = inflater.inflate(R.layout.fragment_question, container, false);
+        Bundle bundle = this.getArguments();
+
+        FirebaseFirestore.getInstance().collection("clusters")
+                .document(bundle.getString("ID")).collection("livepolls")
+                .document("live").get().addOnCompleteListener((OnCompleteListener<DocumentSnapshot>) task -> {
+                    if (task.isComplete()) {
+                        //Question has been asked
+                        TextView question = (TextView) root.findViewById(R.id.questionView);
+                        question.setText(task.getResult().getString("question"));
+                    }
+                });
+
+        Button comfirm = (Button) root.findViewById(R.id.submitButton);
+        EditText replyView = (EditText) root.findViewById(R.id.responseView);
+        Fragment fragment = this;
+        comfirm.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+                String reply = replyView.getText().toString();
+
+                FirebaseFirestore.getInstance().collection("clusters")
+                        .document(bundle.getString("ID")).collection("livepolls")
+                        .document("live")
+                        .update("emails", FieldValue.arrayUnion(email));
+
+                FirebaseFirestore.getInstance().collection("clusters")
+                        .document(bundle.getString("ID")).collection("livepolls")
+                        .document("live")
+                        .update("replies", FieldValue.arrayUnion(reply));
+
+            }
+        });
+
+        return root;
     }
 }
