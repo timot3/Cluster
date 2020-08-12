@@ -17,7 +17,7 @@
     <ListView
         android:id="@+id/dailyList"
         android:layout_width="match_parent"
-        android:layout_height="230dp" />
+        android:layout_height="260dp" />
 
     <TextView
         android:layout_width="match_parent"
