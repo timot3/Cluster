@@ -17,6 +17,7 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.cluster.ClusterSortContainer;
 import com.example.cluster.Lobby;
 import com.example.cluster.MyListAdapter;
 import com.example.cluster.R;
@@ -128,10 +129,10 @@ public class ClustersFragment extends Fragment {
         return root;
     }
 
-    class SortAlphabetical implements Comparator<String> {
-        public int compare(String a, String b) {
-            String lower_a = a.toLowerCase();
-            String lower_b = b.toLowerCase();
+    class SortAlphabetical implements Comparator<ClusterSortContainer> {
+        public int compare(ClusterSortContainer a, ClusterSortContainer b) {
+            String lower_a = (a.getClusterName()).toLowerCase();
+            String lower_b = (b.getClusterName()).toLowerCase();
             return lower_a.compareTo(lower_b);
         }
     }
@@ -179,7 +180,7 @@ public class ClustersFragment extends Fragment {
 
                             //Find a way to sort the list so that the Owners are first, then
                             // the members
-                            //this.sortList(list);
+                            this.sortList(list, clusterID);
                             // Sort before adapter
 
                             MyListAdapter adapter = new MyListAdapter(getActivity(), list);
@@ -205,18 +206,28 @@ public class ClustersFragment extends Fragment {
         }
 
         @RequiresApi(api = Build.VERSION_CODES.N)
-        protected void sortList(List<String> list) {
-            // Partition, then sort each
-            List<String> owners = list.stream().filter(s -> s.endsWith("(Owner)")).collect(Collectors.toList());
-            List<String> members = list.stream().filter(s-> !(s.endsWith("(Owner)"))).collect(Collectors.toList());
+        protected void sortList(List<String> list, List<String> clusterID) {
 
-            Comparator<String> sortAlphabetical = new SortAlphabetical();
+            List<ClusterSortContainer> sorter = new ArrayList<>();
+            for (int i = 0; i < clusterID.size(); i++) {
+                sorter.add(new ClusterSortContainer(list.get(i), clusterID.get(i)));
+            }
+
+            // Partition, then sort each
+            List<ClusterSortContainer> owners = sorter.stream().filter(s -> (s.getClusterName()).endsWith("(Owner)")).collect(Collectors.toList());
+            List<ClusterSortContainer> members = sorter.stream().filter(s-> !((s.getClusterName()).endsWith("(Owner)"))).collect(Collectors.toList());
+
+            Comparator<ClusterSortContainer> sortAlphabetical = new SortAlphabetical();
             owners.sort(sortAlphabetical);
             members.sort(sortAlphabetical);
 
             list.clear();
-            list.addAll(owners);
-            list.addAll(members);
+            clusterID.clear();
+
+            owners.forEach(y->list.add(y.getClusterName()));
+            owners.forEach(z->clusterID.add(z.getClusterID()));
+            members.forEach(a->list.add(a.getClusterName()));
+            members.forEach(b->clusterID.add(b.getClusterID()));
         }
     }
 
