@@ -100,12 +100,8 @@ public class CreateFragment extends Fragment {
                 createCommunity(ID);
             }
         })
-        .addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getContext(), "Failed to create Cluster", Toast.LENGTH_SHORT).show();
-            }
-        });
+        .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to create Cluster",
+                Toast.LENGTH_SHORT).show());
     }
 
     private void createCommunity(String ID) {
@@ -114,5 +110,17 @@ public class CreateFragment extends Fragment {
 
         FirebaseFirestore.getInstance().collection("community").document(ID)
                 .collection("posts").add(new HashMap<>());
+
+        FirebaseFirestore.getInstance().collection("clusters").document(ID)
+                .collection("dailypolls").add(new HashMap<>());
+
+
+        Map<String, Object> emptyData = new HashMap<>();
+        emptyData.put("emails", new ArrayList<>());
+        emptyData.put("replies", new ArrayList<>());
+        emptyData.put("question", new String());
+        FirebaseFirestore.getInstance().collection("clusters").document(ID)
+                .collection("livepolls").document("live")
+                .set(emptyData);
     }
 }

@@ -36,15 +36,12 @@ public class PromptFragment extends Fragment {
         EditText questionText = (EditText) root.findViewById(R.id.questionView);
         Button submit = (Button) root.findViewById(R.id.submitButton);
 
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseFirestore.getInstance().collection("clusters")
-                        .document(clusterID).collection("livepolls")
-                        .document("live").update("question",
-                        questionText.getText().toString());
-                Toast.makeText(getContext(), "Question Posted", Toast.LENGTH_LONG).show();
-            }
+        submit.setOnClickListener(v -> {
+            FirebaseFirestore.getInstance().collection("clusters")
+                    .document(clusterID).collection("livepolls")
+                    .document("live").update("question",
+                    questionText.getText().toString());
+            Toast.makeText(getContext(), "Question Posted", Toast.LENGTH_LONG).show();
         });
 
         return root;
