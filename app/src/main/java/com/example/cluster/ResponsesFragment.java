@@ -91,16 +91,21 @@ public class ResponsesFragment extends Fragment {
                                     DocumentSnapshot snapshot = task.getResult();
 
                                     List<String> replies = (List<String>) snapshot.get("replies");
-                                    for (String reply : replies) {
-                                        if (reply != null) {
-                                            livePolls.add(reply);
+                                    if (replies != null || replies.isEmpty()) {
+                                        for (String reply : replies) {
+                                            if (reply != null) {
+                                                livePolls.add(reply);
+                                            }
+                                        }
+                                        try {
+                                            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                                                    android.R.layout.simple_list_item_1, livePolls);
+                                            listViewLive.setAdapter(adapter);
+                                            Log.wtf("Bruh", "reloading");
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
                                         }
                                     }
-
-                                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                                            android.R.layout.simple_list_item_1, livePolls);
-                                    listViewLive.setAdapter(adapter);
-                                    Log.wtf("Bruh", "reloading");
                                 }
 
                             });
