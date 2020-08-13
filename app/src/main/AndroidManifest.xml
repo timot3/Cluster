@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ReplyPost"></activity>
+        <activity android:name=".DailyPollingResults"></activity>
+        <activity android:name=".ReplyPost" />
         <activity android:name=".CreateNewPost" />
         <activity android:name=".PostPage" />
         <activity android:name=".LivePoll" />

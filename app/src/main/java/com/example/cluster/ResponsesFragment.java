@@ -71,7 +71,12 @@ public class ResponsesFragment extends Fragment {
                             listViewDaily.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                                    //Create new activity
+                                    Intent nextPage = new Intent(getActivity(), DailyPollingResults.class);
+                                    nextPage.putExtra("title", dailyPolls.get(position));
+                                    nextPage.putExtra("pollID", dailyPollID.get(position));
+                                    nextPage.putExtra("clusterID", clusterID);
+                                    startActivity(nextPage);
                                 }
                             });
                         }
