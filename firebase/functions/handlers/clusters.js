@@ -60,6 +60,16 @@ exports.createNewCluster = (req, res) => {
           console.log(err)
         });
 
+        // Create collections within new cluster
+        const clusterCollections = {
+          question: "",
+          emails: [],
+          replies: []
+        };
+        db.collection('clusters').doc(resCluster.clusterId).collection('dailypolls').add({}).catch(err => console.error(err));
+        db.collection('clusters').doc(resCluster.clusterId).collection('livepolls').doc('live').set(clusterCollections).catch(err => console.error(err));
+
+        // Create new document in community collection
         const newPostCollection = {
           question: "New Question",
           replies: []
