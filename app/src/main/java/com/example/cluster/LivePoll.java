@@ -1,5 +1,6 @@
 package com.example.cluster;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
@@ -18,7 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class LivePoll extends FragmentActivity {
+public class LivePoll extends AppCompatActivity {
 
 
 
