@@ -68,7 +68,15 @@ public class PostPage extends AppCompatActivity {
         Intent nextPage = new Intent(this, ReplyPost.class);
         nextPage.putExtra("clusterID", clusterID);
         nextPage.putExtra("postID", postID);
+        nextPage.putExtra("title", getIntent().getStringExtra("title"));
         startActivity(nextPage);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 500)
+            this.recreate();
     }
 
 }
