@@ -183,7 +183,7 @@ public class ClustersFragment extends Fragment {
                             this.sortList(list, clusterID);
                             // Sort before adapter
 
-                            MyListAdapter adapter = new MyListAdapter(getActivity(), list);
+                            MyListAdapter adapter = new MyListAdapter(getActivity(), list, true);
 
                             listView.setAdapter(adapter);
 

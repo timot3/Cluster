@@ -109,8 +109,8 @@ public class Community extends Fragment {
                             //Collections.sort(clusterNames);
 
                             //Connect to listView
-                            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
-                                    android.R.layout.simple_list_item_1, clusterNames);
+                            MyListAdapter adapter = new MyListAdapter(getActivity(), clusterNames,
+                                    false);
 
                             listView.setAdapter(adapter);
 

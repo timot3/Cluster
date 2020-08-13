@@ -14,12 +14,14 @@ public class MyListAdapter extends ArrayAdapter<String> {
 
     private final Activity context;
     private final ArrayList<String> clusterNames;
+    private final boolean clusterView;
 
-    public MyListAdapter(Activity context, ArrayList<String> clusterNames) {
+    public MyListAdapter(Activity context, ArrayList<String> clusterNames, boolean clusterView) {
         super(context, R.layout.row, clusterNames);
 
         this.context = context;
         this.clusterNames = clusterNames;
+        this.clusterView = clusterView;
     }
 
     public View getView(int position, View view, ViewGroup parent) {
@@ -42,11 +44,15 @@ public class MyListAdapter extends ArrayAdapter<String> {
             cluster.setText(clusterNames.get(position));
 
         TextView memberStatus = (TextView) rowView.findViewById(R.id.memberStatus);
-        if (clusterNames.get(position).contains("(Owner)"))
-            memberStatus.setText("Owner");
-        else
-            memberStatus.setText("Member");
-
+        if (clusterView) {
+            if (clusterNames.get(position).contains("(Owner)"))
+                memberStatus.setText("Owner");
+            else
+                memberStatus.setText("Member");
+        }
+        else {
+            memberStatus.setText("Community Open");
+        }
         return rowView;
     }
 }
