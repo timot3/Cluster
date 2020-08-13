@@ -8,8 +8,9 @@
 
     <EditText
         android:id="@+id/emailField"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="333dp"
+        android:layout_height="50dp"
+        android:background="@drawable/back"
         android:ems="10"
         android:hint="Email"
         android:inputType="textPersonName"
@@ -18,12 +19,13 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.694" />
+        app:layout_constraintVertical_bias="0.876" />
 
     <EditText
         android:id="@+id/PasswordField"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="333dp"
+        android:layout_height="50dp"
+        android:background="@drawable/back"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
@@ -36,26 +38,42 @@
 
     <Button
         android:id="@+id/LoginButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="135dp"
+        android:background="@drawable/rounded_button"
+        android:layout_height="47dp"
         android:layout_marginBottom="252dp"
         android:onClick="onSignInClick"
-        android:text="Sign In"
+        android:textColor="@android:color/white"
+        android:textAllCaps="false"
+        android:text="Submit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/NewUserButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
         android:onClick="onCreateAccountClick"
-        android:text="Create New User"
+        android:background="@drawable/rounded_button"
+        android:textColor="@android:color/white"
+        android:textAllCaps="false"
+        android:text="Create Account"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/LoginButton"
-        app:layout_constraintVertical_bias="0.181" />
+        app:layout_constraintVertical_bias="0.121" />
+
+<!--    <ImageView-->
+<!--        android:id="@+id/imageView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="100dp"-->
+<!--        android:adjustViewBounds="true"-->
+<!--        android:src="@drawable/header"-->
+<!--        tools:layout_editor_absoluteX="0dp"-->
+<!--        tools:layout_editor_absoluteY="-10dp" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>
