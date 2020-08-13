@@ -10,6 +10,30 @@
     >
 
     <TextView
+        android:id="@+id/contextView"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        android:text="Context"
+        app:layout_constraintBottom_toTopOf="@+id/replyList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.963" />
+
+    <ListView
+        android:id="@+id/replyList"
+        android:layout_width="412dp"
+        android:layout_height="243dp"
+        android:clickable="false"
+        app:layout_constraintBottom_toTopOf="@+id/createReply"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.796" />
+
+    <TextView
         android:id="@+id/titleView"
         android:layout_width="0dp"
         android:layout_height="77dp"
@@ -17,23 +41,12 @@
         android:gravity="center"
         android:text="Title"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/replyList"
+        app:layout_constraintBottom_toTopOf="@+id/contextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.117" />
-
-    <ListView
-        android:id="@+id/replyList"
-        android:layout_width="0dp"
-        android:layout_height="377dp"
-        app:layout_constraintBottom_toTopOf="@+id/createReply"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.598" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/createReply"
@@ -45,5 +58,6 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.918" />
+        app:layout_constraintVertical_bias="0.891" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
