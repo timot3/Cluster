@@ -17,9 +17,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.sql.ResultSet;
 import java.util.List;
 
 public class PostPage extends AppCompatActivity {
+
+    String clusterID;
+    String postID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +35,8 @@ public class PostPage extends AppCompatActivity {
         TextView title = (TextView) findViewById(R.id.titleView);
         title.setText(thisPage.getStringExtra("title"));
         ListView listView = (ListView) findViewById(R.id.replyList);
-        String clusterID = thisPage.getStringExtra("clusterID");
-        String postID = thisPage.getStringExtra("postID");
+        clusterID = thisPage.getStringExtra("clusterID");
+        postID = thisPage.getStringExtra("postID");
         TextView questionView = findViewById(R.id.contextView);
 
         FirebaseFirestore.getInstance().collection("community").document(clusterID)
@@ -61,6 +65,10 @@ public class PostPage extends AppCompatActivity {
 
     public void createReply(View view) {
         //Create reply activity
+        Intent nextPage = new Intent(this, ReplyPost.class);
+        nextPage.putExtra("clusterID", clusterID);
+        nextPage.putExtra("postID", postID);
+        startActivity(nextPage);
     }
 
 }

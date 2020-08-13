@@ -29,7 +29,6 @@ import java.util.List;
 
 public class ResponsesFragment extends Fragment {
 
-    Handler handler = new Handler();
     ListView listViewLive;
     String clusterID;
 
