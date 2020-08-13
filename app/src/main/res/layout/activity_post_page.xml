@@ -49,6 +49,9 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <Button
+        android:background="@drawable/rounded_button"
+        android:textColor="@android:color/white"
+        android:textAllCaps="false"
         android:id="@+id/createReply"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

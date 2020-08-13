@@ -7,6 +7,7 @@
     tools:context=".CreateNewUser">
 
     <EditText
+        android:background="@drawable/back"
         android:id="@+id/new_name_field"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,6 +22,7 @@
         app:layout_constraintVertical_bias="0.177" />
 
     <EditText
+        android:background="@drawable/back"
         android:id="@+id/new_email_field"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -50,6 +52,7 @@
         app:layout_constraintVertical_bias="0.076" />
 
     <EditText
+        android:background="@drawable/back"
         android:id="@+id/new_password_field"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -64,6 +67,7 @@
         app:layout_constraintVertical_bias="0.447" />
 
     <EditText
+        android:background="@drawable/back"
         android:id="@+id/confirm_password_field"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -78,6 +82,9 @@
         app:layout_constraintVertical_bias="0.574" />
 
     <Button
+        android:background="@drawable/rounded_button"
+        android:textColor="@android:color/white"
+        android:textAllCaps="false"
         android:id="@+id/submit_new_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

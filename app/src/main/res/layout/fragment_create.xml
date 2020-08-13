@@ -7,6 +7,7 @@
     tools:context=".ui.create.CreateFragment">
 
     <EditText
+        android:background="@drawable/back"
         android:id="@+id/createField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,6 +22,7 @@
         app:layout_constraintVertical_bias="0.218" />
 
     <EditText
+        android:background="@drawable/back"
         android:id="@+id/codeField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -38,6 +40,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="create"
+        android:background="@drawable/rounded_button"
+        android:textColor="@android:color/white"
+        android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

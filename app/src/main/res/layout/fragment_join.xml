@@ -7,6 +7,7 @@
     tools:context=".ui.join.JoinFragment">
 
     <EditText
+        android:background="@drawable/back"
         android:id="@+id/JoinField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,6 +22,9 @@
         app:layout_constraintVertical_bias="0.294" />
 
     <Button
+        android:background="@drawable/rounded_button"
+        android:textColor="@android:color/white"
+        android:textAllCaps="false"
         android:id="@+id/JoinButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
