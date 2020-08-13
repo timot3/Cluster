@@ -56,6 +56,12 @@ public class DailyPolls extends AppCompatActivity {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                     //Create new activity
+                                    Intent nextPage = new Intent(DailyPolls.this,
+                                            ReplyDailyPoll.class);
+                                    nextPage.putExtra("clusterID", clusterID);
+                                    nextPage.putExtra("pollID", pollID.get(position));
+                                    nextPage.putExtra("title", polls.get(position));
+                                    startActivity(nextPage);
                                 }
                             });
                         }
