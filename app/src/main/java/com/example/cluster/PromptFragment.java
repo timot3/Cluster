@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PromptFragment extends Fragment {
 
@@ -35,12 +40,27 @@ public class PromptFragment extends Fragment {
 
         EditText questionText = (EditText) root.findViewById(R.id.questionView);
         Button submit = (Button) root.findViewById(R.id.submitButton);
+        Switch type = (Switch) root.findViewById(R.id.switchType);
 
         submit.setOnClickListener(v -> {
-            FirebaseFirestore.getInstance().collection("clusters")
-                    .document(clusterID).collection("livepolls")
-                    .document("live").update("question",
-                    questionText.getText().toString());
+
+            boolean live = type.isChecked();
+
+            if (live) {
+                FirebaseFirestore.getInstance().collection("clusters")
+                        .document(clusterID).collection("livepolls")
+                        .document("live").update("question",
+                        questionText.getText().toString());
+            }
+            else {
+                Map<String, Object> data = new HashMap<>();
+                data.put("question", questionText.getText().toString());
+                data.put("replies", new ArrayList<>());
+
+                FirebaseFirestore.getInstance().collection("clusters")
+                        .document(clusterID).collection("dailypolls")
+                        .add(data);
+            }
             Toast.makeText(getContext(), "Question Posted", Toast.LENGTH_LONG).show();
         });
 
