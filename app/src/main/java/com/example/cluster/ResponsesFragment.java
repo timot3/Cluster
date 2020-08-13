@@ -12,14 +12,17 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ResponsesFragment extends Fragment {
 
@@ -70,40 +73,34 @@ public class ResponsesFragment extends Fragment {
                 });
 
         // Replace this with Live Polling results
-        /*
-        FirebaseFirestore.getInstance().collection("clusters").document(clusterID)
-                .collection("livepolls").get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        ArrayList<String> livePolls = new ArrayList<>();
-                        ArrayList<String> livePollID = new ArrayList<>();
-                        if (task.isComplete()) {
-                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                                String liveTitle = documentSnapshot.getString("question");
-                                String liveId = documentSnapshot.getId();
-                                if (liveTitle != null) {
-                                    livePolls.add(liveTitle);
-                                    livePollID.add(liveId);
-                                }
-                            }
 
-                            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+        FirebaseFirestore.getInstance().collection("clusters").document(clusterID)
+                .collection("livepolls").document("live").get()
+                .addOnCompleteListener(task -> {
+                    if (task.isComplete()) {
+                        ArrayList<String> livePolls = new ArrayList<>();
+                        DocumentSnapshot snapshot = task.getResult();
+
+                        List<String> replies = (List<String>) snapshot.get("replies");
+                        for (String reply : replies) {
+                            if (reply != null) {
+                                livePolls.add(reply);
+                            }
+                        }
+
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
                                     android.R.layout.simple_list_item_1, livePolls);
                             listViewLive.setAdapter(adapter);
 
-                            listViewLive.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        listViewLive.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                                }
-                            });
-                        }
+                            }
+                        });
                     }
+
                 });
-                */
-
-
         return root;
     }
 }
