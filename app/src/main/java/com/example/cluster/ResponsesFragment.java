@@ -1,7 +1,10 @@
 package com.example.cluster;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +29,10 @@ import java.util.List;
 
 public class ResponsesFragment extends Fragment {
 
+    Handler handler = new Handler();
+    ListView listViewLive;
+    String clusterID;
+
     public ResponsesFragment() {
     }
 
@@ -36,10 +43,10 @@ public class ResponsesFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_responses, container, false);
 
         Intent thisScreen = getActivity().getIntent();
-        String clusterID = thisScreen.getStringExtra("ID");
+        clusterID = thisScreen.getStringExtra("ID");
 
         ListView listViewDaily = (ListView) root.findViewById(R.id.dailyList);
-        ListView listViewLive = (ListView) root.findViewById(R.id.liveList);
+        listViewLive = (ListView) root.findViewById(R.id.liveList);
 
         FirebaseFirestore.getInstance().collection("clusters").document(clusterID)
                 .collection("dailypolls").get()
@@ -73,34 +80,38 @@ public class ResponsesFragment extends Fragment {
                 });
 
         // Replace this with Live Polling results
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    FirebaseFirestore.getInstance().collection("clusters").document(clusterID)
+                            .collection("livepolls").document("live").get()
+                            .addOnCompleteListener(task -> {
+                                if (task.isComplete()) {
+                                    ArrayList<String> livePolls = new ArrayList<>();
+                                    DocumentSnapshot snapshot = task.getResult();
 
-        FirebaseFirestore.getInstance().collection("clusters").document(clusterID)
-                .collection("livepolls").document("live").get()
-                .addOnCompleteListener(task -> {
-                    if (task.isComplete()) {
-                        ArrayList<String> livePolls = new ArrayList<>();
-                        DocumentSnapshot snapshot = task.getResult();
+                                    List<String> replies = (List<String>) snapshot.get("replies");
+                                    for (String reply : replies) {
+                                        if (reply != null) {
+                                            livePolls.add(reply);
+                                        }
+                                    }
 
-                        List<String> replies = (List<String>) snapshot.get("replies");
-                        for (String reply : replies) {
-                            if (reply != null) {
-                                livePolls.add(reply);
-                            }
-                        }
+                                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                                            android.R.layout.simple_list_item_1, livePolls);
+                                    listViewLive.setAdapter(adapter);
+                                    Log.wtf("Bruh", "reloading");
+                                }
 
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                                    android.R.layout.simple_list_item_1, livePolls);
-                            listViewLive.setAdapter(adapter);
-
-                        listViewLive.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                            }
-                        });
-                    }
-
-                });
+                            });
+                    android.os.SystemClock.sleep(3000);
+                }
+            }
+        }).start();
         return root;
     }
+
+
+
 }
