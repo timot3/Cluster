@@ -39,7 +39,7 @@
         android:layout_marginTop="32dp"
         android:background="@drawable/rounded_button"
         android:onClick="onSignInClick"
-        android:text="Login In!"
+        android:text="Login!"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
