@@ -41,7 +41,7 @@ public class ReplyDailyPoll extends AppCompatActivity {
                     FieldValue.arrayUnion(reply)).addOnCompleteListener(task -> {
                         if (task.isComplete()) {
                             Toast.makeText(this, "Reply to " + getIntent().getStringExtra("title")
-                                    + " Sucessfull", Toast.LENGTH_LONG).show();
+                                    + " Successful", Toast.LENGTH_LONG).show();
                         }
                     });
 
