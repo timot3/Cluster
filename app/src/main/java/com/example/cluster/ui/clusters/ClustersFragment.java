@@ -45,8 +45,10 @@ import java.util.concurrent.ExecutionException;
 public class ClustersFragment extends Fragment {
 
     private ClustersViewModel clustersViewModel;
-    private String userEmail;
 
+    //User email
+    private String userEmail;
+    //Listview in xml page
     private ListView listView;
 
 
@@ -59,76 +61,17 @@ public class ClustersFragment extends Fragment {
 
         listView = (ListView) root.findViewById(R.id.lstMain);
         userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
+        //Start Async task after settings elements
         new MyTask().execute();
 
-        //Values that we will get from firebase user
-        String[] clusters = {"PHYS 214", "CS 125", "eSports 360 (Owner)"};
-
-
-        /**
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, clusters);
-
-        //Setting adapter
-        ListView listView = (ListView) root.findViewById(R.id.lstMain);
-        listView.setAdapter(adapter);
-
-        //Setting items to be clickable
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView //<? > arg0, View view, int position, long id) {
-                Intent i = new Intent(getActivity(), StudentViewCluster.class);
-                i.putExtra("Cluster", clusters[position]);
-                startActivity(i);
-            }
-
-        });
-
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                getContext(), android.R.layout.simple_list_item_1, clusters);
-
-        ListView listView = (ListView) root.findViewById(R.id.lstMain);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View view, int position, long id) {
-                Intent i = new Intent(getActivity(), StudentViewCluster.class);
-                i.putExtra("Cluster", clusters[position]);
-                startActivity(i);
-            }
-
-        });
-        view = root;
-         **/
-
-        /**
-        FirebaseFirestore.getInstance().collection("clusters")
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                List<String> list = new ArrayList<>();
-                for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                    String name = documentSnapshot.getString("name");
-                    list.add(name);
-                }
-                ListView listView = root.findViewById(R.id.lstMain);
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                        android.R.layout.simple_list_item_1, list);
-
-                listView.setAdapter(adapter);
-
-                listView.setOnItemClickListener((parent, view, position, id) -> {
-                    Intent i = new Intent(getActivity(), StudentViewCluster.class);
-                    i.putExtra("Cluster", parent.getItemIdAtPosition(position));
-                    startActivity(i);
-                });
-            }
-        });
-         **/
 
         return root;
     }
 
+    /**
+     * Sorts clusters
+     */
     class SortAlphabetical implements Comparator<ClusterSortContainer> {
         public int compare(ClusterSortContainer a, ClusterSortContainer b) {
             String lower_a = (a.getClusterName()).toLowerCase();
@@ -137,6 +80,9 @@ public class ClustersFragment extends Fragment {
         }
     }
 
+    /**
+     * AsyncTask that gets relevant info from Firebase
+     */
     private class MyTask extends AsyncTask<Void, Void, Void> {
 
         @RequiresApi(api = Build.VERSION_CODES.N)
@@ -150,6 +96,7 @@ public class ClustersFragment extends Fragment {
                         ArrayList<String> list = new ArrayList<>();
                         ArrayList<String> clusterID = new ArrayList<>();
 
+                        //Check if task worked
                         if (task.isComplete()) {
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
 
@@ -158,12 +105,14 @@ public class ClustersFragment extends Fragment {
                                 String ownerEmail = documentSnapshot.getString("ownerEmail");
                                 List<String> members = (List<String>) documentSnapshot.get("members");
                                 boolean isMember = false;
+
                                 //First check if its a owner
                                 if (ownerEmail.equals(userEmail)) {
                                     list.add(clusterName + " (Owner)");
                                     clusterID.add(documentSnapshot.getId());
                                     continue;
                                 }
+
                                 //Then member
                                 for (String m : members) {
                                     if (m.equals(userEmail)) {
@@ -173,20 +122,20 @@ public class ClustersFragment extends Fragment {
                                     }
                                 }
 
-                                //Yes add to list, otherwise don't add it
+                                //If member add to list, otherwise don't add it
                                 if (isMember)
                                     list.add(clusterName);
                             }
 
-                            //Find a way to sort the list so that the Owners are first, then
-                            // the members
+                            //Sort list to show owner then members clusters
                             this.sortList(list, clusterID);
-                            // Sort before adapter
 
+                            //Custom Listview adapter
                             MyListAdapter adapter = new MyListAdapter(getActivity(), list, true);
 
                             listView.setAdapter(adapter);
 
+                            //Set what each item does
                             listView.setOnItemClickListener((parent, view, position, id) -> {
 
                                 //This is where we can choose what view works
@@ -196,6 +145,7 @@ public class ClustersFragment extends Fragment {
                                 } else {
                                     i = new Intent(getActivity(), StudentViewCluster.class);
                                 }
+                                //Send relevant info to get page
                                 i.putExtra("Cluster", list.get(position));
                                 i.putExtra("ID", clusterID.get(position));
                                 startActivity(i);
@@ -205,6 +155,12 @@ public class ClustersFragment extends Fragment {
             return null;
         }
 
+        /**
+         * Custom sorting algorithm that sort by status and alphabetically
+         * while keeping the ids in the same position
+         * @param list of names of the clusters
+         * @param clusterID that are associated with the cluster
+         */
         @RequiresApi(api = Build.VERSION_CODES.N)
         protected void sortList(List<String> list, List<String> clusterID) {
 

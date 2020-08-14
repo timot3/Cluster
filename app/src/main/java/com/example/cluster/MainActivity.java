@@ -42,12 +42,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Function when login button is clicked
+     * @param v View object
+     */
     public void onSignInClick(View v) {
 
         String email = ((EditText) findViewById(R.id.emailField)).getText().toString();
         String password = ((EditText) findViewById(R.id.PasswordField)).getText().toString();
 
+        //Check fields
         if (email.isEmpty() || password.isEmpty()) {
             sendInvalidAlert();
             return;
@@ -91,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Creates and Sends an Invalid Alert when Logging in
+     * Creates and Sends an Invalid Alert if logging in fails
      */
     private void sendInvalidAlert() {
         this.runOnUiThread(() -> {

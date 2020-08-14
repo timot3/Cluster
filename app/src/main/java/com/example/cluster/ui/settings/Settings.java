@@ -37,11 +37,12 @@ public class Settings extends Fragment {
         settingsViewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        //Values that we will get from firebase user
+        //Possible settings
         String[] settings = {"About", "Change Name", "Change Password"};
 
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, settings);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_list_item_1, settings);
 
         //Setting adapter
         ListView listView = (ListView) root.findViewById(R.id.lstSettings);

@@ -42,36 +42,35 @@ public class JoinFragment extends Fragment {
         joinViewModel =
                 ViewModelProviders.of(this).get(JoinViewModel.class);
         View root = inflater.inflate(R.layout.fragment_join, container, false);
-        //final TextView textView = root.findViewById(R.id.text_d);
-        joinViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                //textView.setText(s);
-            }
-        });
 
+
+        //Relevant fields to use
         joinCluster = (Button) root.findViewById(R.id.JoinButton);
         joinIdField = (EditText) root.findViewById(R.id.JoinField);
 
-        joinCluster.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String joinCode = joinIdField.getText().toString();
-                if (TextUtils.isEmpty(joinCode)) {
-                    Toast.makeText(getContext(), "Enter Join Code", Toast.LENGTH_LONG).show();
-                }
-                else {
-                    String user_email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-                    verifyUser(joinCode, user_email);
-                }
+        joinCluster.setOnClickListener(v -> {
+
+            //Get string from the UI element
+            String joinCode = joinIdField.getText().toString();
+            if (TextUtils.isEmpty(joinCode)) {
+                Toast.makeText(getContext(), "Enter Cluster Code", Toast.LENGTH_LONG).show();
+            }
+            else {
+                String user_email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+                verifyUser(joinCode, user_email);
             }
         });
 
         return root;
     }
 
+    /**
+     * Adds user to cluster if the join code matches any of the firebase clusters
+     * @param joinCode code entered by the user
+     * @param user_email email address of the current user
+     */
     protected void verifyUser(String joinCode, String user_email) {
-        // Read firebase
+        // Read firebase data
         FirebaseFirestore.getInstance()
                 .collection("clusters")
                 .get()
@@ -81,6 +80,7 @@ public class JoinFragment extends Fragment {
                         boolean isOwner = false;
                         QueryDocumentSnapshot cluster = null;
 
+                        //Loop through each cluster
                         for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                             String clusterCode = documentSnapshot.getString("joinCode");
                             String ownerEmail = documentSnapshot.getString("ownerEmail");
@@ -104,11 +104,13 @@ public class JoinFragment extends Fragment {
                             // Write to firebase, successful join
                             Toast.makeText(getContext(), "Successfully Joined!", Toast.LENGTH_LONG).show();
 
+                            //Update members array of the cluster
                             Map<String, List<String>> update = new HashMap<>();
                             List<String> updateArr = (List<String>) cluster.get("members");
                             updateArr.add(user_email);
                             update.put("members", updateArr);
 
+                            //Send to firebase
                             FirebaseFirestore.getInstance().collection("clusters").document(cluster.getId())
                                     .set(update, SetOptions.merge());
                         }
