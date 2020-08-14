@@ -72,10 +72,12 @@ public class MainActivity extends AppCompatActivity {
                 });
 
     }
-    public void onCreateAccountClick(View v) {
-        Intent j = new Intent(MainActivity.this, CreateNewUser.class);
-        startActivity(j);
-    }
+
+    // Works, but bad UI
+//    public void onCreateAccountClick(View v) {
+//        Intent j = new Intent(MainActivity.this, CreateNewUser.class);
+//        startActivity(j);
+//    }
 
 
     /**

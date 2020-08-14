@@ -13,6 +13,7 @@
         android:id="@+id/contextView"
         android:layout_width="0dp"
         android:layout_height="120dp"
+        android:background="@drawable/back"
         android:text="Context"
         app:layout_constraintBottom_toTopOf="@+id/replyList"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,6 +36,8 @@
 
     <TextView
         android:id="@+id/titleView"
+        android:background="@drawable/back"
+
         android:layout_width="0dp"
         android:layout_height="77dp"
         android:fontFamily="sans-serif-black"

@@ -7,46 +7,48 @@
     tools:context=".CreateNewPost">
 
     <EditText
-        android:background="@drawable/back"
         android:id="@+id/detailsView"
-        android:layout_width="285dp"
-        android:layout_height="109dp"
+        android:layout_width="281dp"
+        android:layout_height="200dp"
+        android:background="@drawable/back"
         android:ems="10"
+        android:gravity="top"
         android:hint="Contents"
         android:inputType="textPersonName"
+        android:text="Type your question here..."
         app:layout_constraintBottom_toTopOf="@+id/submitButton2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.576" />
+        app:layout_constraintVertical_bias="0.809" />
 
     <Button
-        android:background="@drawable/rounded_button"
-        android:textColor="@android:color/white"
-        android:textAllCaps="false"
         android:id="@+id/submitButton2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="252dp"
+        android:background="@drawable/rounded_button"
         android:onClick="onSubmit"
         android:text="Submit"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.785" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:background="@drawable/back"
         android:id="@+id/titleView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/back"
         android:ems="10"
         android:gravity="center"
         android:hint="Title"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/detailsView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

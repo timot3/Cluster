@@ -7,12 +7,12 @@
     tools:context=".ui.create.CreateFragment">
 
     <EditText
-        android:background="@drawable/back"
         android:id="@+id/createField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/back"
         android:ems="10"
-        android:hint="Cluster Name"
+        android:hint="Ex. Trivia Night!"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -39,14 +39,28 @@
         android:id="@+id/createButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="create"
         android:background="@drawable/rounded_button"
-        android:textColor="@android:color/white"
+        android:text="Create"
         android:textAllCaps="false"
+        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/codeField"
         app:layout_constraintVertical_bias="0.175" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="72dp"
+        android:layout_height="25dp"
+        android:text="Name"
+        android:textColor="@color/colorPrimary"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.292"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.15" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
