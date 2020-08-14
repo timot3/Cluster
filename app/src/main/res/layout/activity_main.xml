@@ -10,7 +10,7 @@
         android:id="@+id/emailField"
         android:layout_width="333dp"
         android:layout_height="50dp"
-        android:layout_marginTop="128dp"
+        android:layout_marginTop="180dp"
         android:background="@drawable/back"
         android:ems="10"
         android:hint="Email"
@@ -23,7 +23,7 @@
         android:id="@+id/PasswordField"
         android:layout_width="333dp"
         android:layout_height="50dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/back"
         android:ems="10"
         android:hint="Password"
@@ -39,13 +39,23 @@
         android:layout_marginTop="32dp"
         android:background="@drawable/rounded_button"
         android:onClick="onSignInClick"
-        android:text="Submit"
+        android:text="Login In!"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/PasswordField" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="95dp"
+        android:layout_height="95dp"
+        app:layout_constraintBottom_toTopOf="@+id/emailField"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/cluster_icon" />
 
     <!--    <Button-->
     <!--        android:id="@+id/NewUserButton"-->
