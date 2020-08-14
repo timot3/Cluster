@@ -34,4 +34,5 @@ As we strive to make online learning more accessible, we are looking into variou
 We would also love to make Cluster cross-platform, namely a web-client that would allow all users to continue to build community and interact online.
 
 https://devpost.com/software/cluster-g6z0v1
+
 [Video Demo](https://www.youtube.com/watch?v=7uwyFWmb3Vc)
