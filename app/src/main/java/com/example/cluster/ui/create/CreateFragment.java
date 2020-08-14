@@ -105,11 +105,13 @@ public class CreateFragment extends Fragment {
     }
 
     private void createCommunity(String ID) {
+
+
         FirebaseFirestore.getInstance().collection("community").document(ID)
                 .set(new HashMap<>());
 
         FirebaseFirestore.getInstance().collection("community").document(ID)
-                .collection("posts").add(new HashMap<>());
+                .collection("posts");
 
         FirebaseFirestore.getInstance().collection("clusters").document(ID)
                 .collection("dailypolls").add(new HashMap<>());
