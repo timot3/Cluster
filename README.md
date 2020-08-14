@@ -6,10 +6,6 @@ While nothing can replace in-person learning, we can do our best to close the lo
 
 Backend in Firebase with the front end as a Android app (web app in progress)
 
-
-Informational Website - https://gauravdraj.github.io/clusterwebsite/
-
-Website repo - https://github.com/gauravdraj/clusterwebsite
-
+https://timot3.github.io/Cluster/
 
 Made during HackThis hosted by HackIllinois
