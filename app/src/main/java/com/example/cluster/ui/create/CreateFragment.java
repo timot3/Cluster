@@ -76,7 +76,7 @@ public class CreateFragment extends Fragment {
                     Map<String, Object> data = new HashMap<>();
                     data.put("active", true);
                     data.put("name", clusterName);
-                    data.put("joinCluster", code);
+                    data.put("joinCode", code);
                     data.put("members", new ArrayList<>());
                     data.put("meetings", new ArrayList<>());
                     data.put("ownerEmail", FirebaseAuth.getInstance().getCurrentUser().getEmail());
