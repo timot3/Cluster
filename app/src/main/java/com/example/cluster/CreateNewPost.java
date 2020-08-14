@@ -21,16 +21,21 @@ public class CreateNewPost extends AppCompatActivity {
         setTitle("Create New Post");
     }
 
+    /**
+     * Function when submit button is click
+     * @param view View object
+     */
     public void onSubmit(View view) {
         String title = ((EditText) findViewById(R.id.titleView)).getText().toString();
         String context = ((EditText) findViewById(R.id.detailsView)).getText().toString();
 
+        //Create data fields
         Map<String, Object> data = new HashMap<>();
         data.put("title", title);
         data.put("question", context);
         data.put("replies", new ArrayList<>());
 
-
+        //Add to firebase
         FirebaseFirestore.getInstance().collection("community")
                 .document(getIntent().getStringExtra("clusterID"))
                 .collection("posts").add(data);

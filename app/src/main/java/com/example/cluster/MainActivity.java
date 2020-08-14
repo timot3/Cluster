@@ -77,12 +77,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    // Works, but bad UI
-//    public void onCreateAccountClick(View v) {
-//        Intent j = new Intent(MainActivity.this, CreateNewUser.class);
-//        startActivity(j);
-//    }
-
 
     /**
      * Creates login Dialog

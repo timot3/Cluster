@@ -105,10 +105,7 @@ public class Community extends Fragment {
                                 }
                             }
 
-                            //Sort Clusters with ID's
-                            //Collections.sort(clusterNames);
-
-                            //Connect to listView
+                            //Connect to custom listView
                             MyListAdapter adapter = new MyListAdapter(getActivity(), clusterNames,
                                     false);
 
@@ -118,6 +115,7 @@ public class Community extends Fragment {
                             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    //Create new page with relevant info
                                     Intent i = new Intent(getActivity(), DiscussionBoard.class);
                                     i.putExtra("title", clusterNames.get(position));
                                     i.putExtra("clusterID", clusterIDs.get(position));

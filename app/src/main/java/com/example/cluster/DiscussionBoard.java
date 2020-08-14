@@ -25,48 +25,65 @@ public class DiscussionBoard extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discussion_board);
+
+        //Get info from previous page
         Intent intent = getIntent();
         setTitle(intent.getStringExtra("title"));
+        String clusterID = intent.getStringExtra("clusterID");
+
+        //ListView used in xml page
         ListView listView = (ListView) findViewById(R.id.displayList);
 
-        String clusterID = intent.getStringExtra("clusterID");
+        //Connect to firebase
         FirebaseFirestore.getInstance().collection("community")
                 .document(clusterID).collection("posts").get()
                 .addOnCompleteListener(task -> {
+
+                    //If query is complete
                     if (task.isComplete()) {
                         List<String> postsTitles = new ArrayList<>();
                         List<String> postID = new ArrayList<>();
+                        //Loop through each query
                         for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                             postsTitles.add(documentSnapshot.getString("title"));
                             postID.add(documentSnapshot.getId());
                         }
 
+                        //Link with ListView
                         ArrayAdapter<String> adapter = new ArrayAdapter<>(DiscussionBoard.this,
                                 android.R.layout.simple_list_item_1, postsTitles);
-
                         listView.setAdapter(adapter);
 
-                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                //Add intent here and pass ID
-                                Intent i = new Intent(DiscussionBoard.this, PostPage.class);
-                                i.putExtra("clusterID", clusterID);
-                                i.putExtra("postID", postID.get(position));
-                                i.putExtra("title", postsTitles.get(position));
-                                startActivity(i);
-                            }
+                        //Set clickable activity for each item
+                        listView.setOnItemClickListener((parent, view, position, id) -> {
+                            //Pass relevant info to next screen
+                            Intent i = new Intent(DiscussionBoard.this, PostPage.class);
+                            i.putExtra("clusterID", clusterID);
+                            i.putExtra("postID", postID.get(position));
+                            i.putExtra("title", postsTitles.get(position));
+                            startActivity(i);
                         });
                     }
                 });
     }
 
+    /**
+     * Function for button to create new post
+     * @param view View object
+     */
     public void onCreatePosts(View view) {
+        //Go to next screen with activity
         Intent nextScreen = new Intent(this, CreateNewPost.class);
         nextScreen.putExtra("clusterID", getIntent().getStringExtra("clusterID"));
         startActivityForResult(nextScreen, 500);
     }
 
+    /**
+     * After user creates a new post, update UI
+     * @param requestCode code sent by previous activity
+     * @param resultCode not used, implemented by @Override
+     * @param data Not used, implemented by @Override
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class LivePoll extends AppCompatActivity {
 
 
-
+    //UI elements and Firebase info
     Handler handler = new Handler();
     Fragment fragment;
     static int display;
@@ -41,37 +41,53 @@ public class LivePoll extends AppCompatActivity {
 
     }
 
+    /**
+     * This is used after the view is created
+     */
     @Override
     protected void onStart() {
         super.onStart();
 
         handler.postDelayed(new Runnable() {
 
+            /**
+             * Runs background thread to get live question
+             */
             @Override
             public void run() {
+                //Get correct cluster
                 FirebaseFirestore.getInstance().collection("clusters")
                         .document(getIntent().getStringExtra("ID"))
                         .collection("livepolls")
                         .document("live").get().addOnCompleteListener(task -> {
+
+                    //Get fragment manager
                     FragmentTransaction fragmentTransaction = getSupportFragmentManager()
                             .beginTransaction();
+
+                    //Check if query is complete
                     if (task.isComplete()) {
                         DocumentSnapshot snapshot = task.getResult();
                         String question = snapshot.getString("question");
                         List<String> emails = (List<String>) snapshot.get("emails");
                         boolean answered = false;
 
+                        //Loop to check if use already answered the question
                         for (String s : emails)
                             if (s.equals(userEmail))
                                 answered = true;
 
+                        //User did not answer
                         if (!(question.isEmpty()) && !answered) {
-                            //Add fragment
                             try {
+                                //Go to the next fragment
+                                //Add relevant info to fragment
                                 Bundle bundle = new Bundle();
                                 QuestionFragment questionFragment = new QuestionFragment();
                                 questionFragment.setArguments(bundle);
                                 bundle.putString("ID", getIntent().getStringExtra("ID"));
+
+                                //Post the fragment
                                 fragmentTransaction.replace(R.id.fragmentContainer,
                                         questionFragment);
                                 fragmentTransaction.addToBackStack(null);
@@ -87,6 +103,6 @@ public class LivePoll extends AppCompatActivity {
                 });
             }
 
-        }, 1000);
+        }, 1000); //Run thread every 1 sec
     }
 }

@@ -24,12 +24,14 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class CreateNewUser extends AppCompatActivity {
 
+    //UI Elements
     private EditText emailEditText;
     private EditText passwordEditText;
     private EditText nameEditText;
     private EditText confirmPasswordEditText;
     private Button createUserButton;
 
+    //Firebase References
     private FirebaseDatabase database;
     private DatabaseReference nDatabase;
     private FirebaseAuth mAuth;
@@ -42,36 +44,42 @@ public class CreateNewUser extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_user);
 
+        //Linking UI elements
         emailEditText = findViewById(R.id.new_email_field);
         passwordEditText = findViewById(R.id.new_password_field);
         nameEditText = findViewById(R.id.new_name_field);
         confirmPasswordEditText = findViewById(R.id.confirm_password_field);
         createUserButton = findViewById(R.id.submit_new_user);
 
+        //Getting firebase references
         database = FirebaseDatabase.getInstance();
         nDatabase = database.getReference(USER);
         mAuth = FirebaseAuth.getInstance();
 
-        createUserButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = emailEditText.getText().toString();
-                String password = passwordEditText.getText().toString();
-                String name = nameEditText.getText().toString();
-                String confirm_password = confirmPasswordEditText.getText().toString();
+        //When button is clicked
+        createUserButton.setOnClickListener(v -> {
+            String email = emailEditText.getText().toString();
+            String password = passwordEditText.getText().toString();
+            String name = nameEditText.getText().toString();
+            String confirm_password = confirmPasswordEditText.getText().toString();
 
-                if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(name) ||
-                TextUtils.isEmpty(confirm_password)) {
-                    Toast.makeText(getApplicationContext(), "Enter name, email, password, and confirmation",
-                            Toast.LENGTH_LONG).show();
-                    return;
-                }
-                user = new User(email, password, name);
-                onClickFormatNewUser(email, password);
+            //Check if fields are empty
+            if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(name) ||
+            TextUtils.isEmpty(confirm_password)) {
+                Toast.makeText(getApplicationContext(), "Enter name, email, password, and confirmation",
+                        Toast.LENGTH_LONG).show();
+                return;
             }
+            user = new User(email, password, name);
+            onClickFormatNewUser(email, password);
         });
     }
 
+    /**
+     * Add user info to Firebase Auth
+     * @param email user's email
+     * @param password user's password
+     */
     public void onClickFormatNewUser(String email, String password) {
 
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -89,6 +97,10 @@ public class CreateNewUser extends AppCompatActivity {
         });
     }
 
+    /**
+     * Sets up UI with Firebase user
+     * @param currentUser Firebase user
+     */
     public void updateUI(FirebaseUser currentUser) {
         String keyId = nDatabase.push().getKey();
         nDatabase.child(keyId).setValue(user);

@@ -21,27 +21,31 @@ public class DailyPollingResults extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_polling_results);
+
+        //Getting relevant info from previous screen
         Intent thisScreen = getIntent();
         setTitle(thisScreen.getStringExtra("title"));
         String clusterID = thisScreen.getStringExtra("clusterID");
         String pollID = thisScreen.getStringExtra("pollID");
+
+        //Linking UI elements
         ListView listView = findViewById(R.id.dailyResponsesList);
 
+        //Connect to FireBase
         FirebaseFirestore.getInstance().collection("clusters")
                 .document(clusterID).collection("dailypolls").document(pollID)
-                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isComplete()) {
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    List<String> replies = (List<String>) documentSnapshot.get("replies");
+                .get().addOnCompleteListener(task -> {
+                    //Check if query is complete
+                    if (task.isComplete()) {
+                        DocumentSnapshot documentSnapshot = task.getResult();
+                        List<String> replies = (List<String>) documentSnapshot.get("replies");
 
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(DailyPollingResults.this,
-                            android.R.layout.simple_list_item_1, replies);
+                        //List items in listView
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(DailyPollingResults.this,
+                                android.R.layout.simple_list_item_1, replies);
 
-                    listView.setAdapter(adapter);
-                }
-            }
-        });
+                        listView.setAdapter(adapter);
+                    }
+                });
     }
 }

@@ -32,39 +32,37 @@ public class DailyPolls extends AppCompatActivity {
         ListView listView = (ListView) findViewById(R.id.dailyList);
         FirebaseFirestore.getInstance().collection("clusters")
                 .document(clusterID).collection("dailypolls").get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        ArrayList<String> polls = new ArrayList<>();
-                        ArrayList<String> pollID = new ArrayList<>();
-                        if (task.isComplete()) {
-                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                                String title = documentSnapshot.getString("question");
-                                String ID = documentSnapshot.getId();
-                                if (title != null) {
-                                    polls.add(title);
-                                    pollID.add(ID);
-                                }
+                .addOnCompleteListener(task -> {
+                    //Get poll titles and ID's
+                    ArrayList<String> polls = new ArrayList<>();
+                    ArrayList<String> pollID = new ArrayList<>();
+                    if (task.isComplete()) {
+                        //Go through each query result
+                        for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                            String title = documentSnapshot.getString("question");
+                            String ID = documentSnapshot.getId();
+                            if (title != null) {
+                                polls.add(title);
+                                pollID.add(ID);
                             }
-
-                            ArrayAdapter<String> adapter = new ArrayAdapter<>(DailyPolls.this,
-                                    android.R.layout.simple_list_item_1, polls);
-
-                            listView.setAdapter(adapter);
-
-                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    //Create new activity
-                                    Intent nextPage = new Intent(DailyPolls.this,
-                                            ReplyDailyPoll.class);
-                                    nextPage.putExtra("clusterID", clusterID);
-                                    nextPage.putExtra("pollID", pollID.get(position));
-                                    nextPage.putExtra("title", polls.get(position));
-                                    startActivity(nextPage);
-                                }
-                            });
                         }
+
+                        //Set listView
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(DailyPolls.this,
+                                android.R.layout.simple_list_item_1, polls);
+
+                        listView.setAdapter(adapter);
+
+                        //Set clickable activity for each item
+                        listView.setOnItemClickListener((parent, view, position, id) -> {
+                            //Create new activity and pass relevant info
+                            Intent nextPage = new Intent(DailyPolls.this,
+                                    ReplyDailyPoll.class);
+                            nextPage.putExtra("clusterID", clusterID);
+                            nextPage.putExtra("pollID", pollID.get(position));
+                            nextPage.putExtra("title", polls.get(position));
+                            startActivity(nextPage);
+                        });
                     }
                 });
     }
