@@ -12,14 +12,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TeacherViewAdapter extends FragmentPagerAdapter {
-
+    //Number of tabs
     private int numOfTabs;
 
+    /**
+     * Constructor for tabbed activity
+     * @param fm Fragment manger
+     * @param numOfTabs Number of tabs
+     */
     public TeacherViewAdapter(@NonNull FragmentManager fm, int numOfTabs) {
         super(fm);
         this.numOfTabs = numOfTabs;
     }
 
+    /**
+     * Select fragment based on position
+     * @param position for the tab
+     * @return Fragment to post
+     */
     @NonNull
     @Override
     public Fragment getItem(int position) {
@@ -34,6 +44,10 @@ public class TeacherViewAdapter extends FragmentPagerAdapter {
 
     }
 
+    /**
+     * Gives the number of tabs
+     * @return number of tabs
+     */
     @Override
     public int getCount() {
         return numOfTabs;

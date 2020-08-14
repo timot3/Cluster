@@ -74,9 +74,12 @@ public class QuestionFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_question, container, false);
         Bundle bundle = this.getArguments();
 
+        //Connect to firebase
         FirebaseFirestore.getInstance().collection("clusters")
                 .document(bundle.getString("ID")).collection("livepolls")
-                .document("live").get().addOnCompleteListener((OnCompleteListener<DocumentSnapshot>) task -> {
+                .document("live").get().addOnCompleteListener((OnCompleteListener<DocumentSnapshot>)
+                task -> {
+                    //If task is complete
                     if (task.isComplete()) {
                         //Question has been asked
                         TextView question = (TextView) root.findViewById(R.id.questionView);
@@ -84,30 +87,31 @@ public class QuestionFragment extends Fragment {
                     }
                 });
 
+        //Link UI elements
         Button comfirm = (Button) root.findViewById(R.id.submitButton);
         EditText replyView = (EditText) root.findViewById(R.id.responseView);
         Fragment fragment = this;
-        comfirm.setOnClickListener(new View.OnClickListener() {
+        comfirm.setOnClickListener(v -> {
 
-            @Override
-            public void onClick(View v) {
-                String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-                String reply = replyView.getText().toString();
+            //Get Info from Firebase and TextView element
+            String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+            String reply = replyView.getText().toString();
 
-                FirebaseFirestore.getInstance().collection("clusters")
-                        .document(bundle.getString("ID")).collection("livepolls")
-                        .document("live")
-                        .update("emails", FieldValue.arrayUnion(email));
+            //Add user email
+            FirebaseFirestore.getInstance().collection("clusters")
+                    .document(bundle.getString("ID")).collection("livepolls")
+                    .document("live")
+                    .update("emails", FieldValue.arrayUnion(email));
 
-                FirebaseFirestore.getInstance().collection("clusters")
-                        .document(bundle.getString("ID")).collection("livepolls")
-                        .document("live")
-                        .update("replies", FieldValue.arrayUnion(reply));
+            //Add user's reply
+            FirebaseFirestore.getInstance().collection("clusters")
+                    .document(bundle.getString("ID")).collection("livepolls")
+                    .document("live")
+                    .update("replies", FieldValue.arrayUnion(reply));
 
-                //Figure out how to end fragment
-                getActivity().getSupportFragmentManager().beginTransaction().replace(LivePoll.display,
-                        new WaitingFragment()).commit();
-            }
+            //End fragment
+            getActivity().getSupportFragmentManager().beginTransaction().replace(LivePoll.display,
+                    new WaitingFragment()).commit();
         });
 
         return root;

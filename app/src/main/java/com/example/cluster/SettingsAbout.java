@@ -23,6 +23,7 @@ public class SettingsAbout extends AppCompatActivity {
         setContentView(R.layout.activity_settings_about);
         setTitle("About");
 
+        //Get UI elements
         TextView name = (TextView) findViewById(R.id.nameField);
         TextView email = (TextView) findViewById(R.id.emailField);
 
@@ -32,12 +33,11 @@ public class SettingsAbout extends AppCompatActivity {
                 .collection("users")
                 .whereEqualTo("email", FirebaseAuth.getInstance().getCurrentUser().getEmail())
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                            name.setText(documentSnapshot.getString("name"));
-                        }
+                .addOnCompleteListener(task -> {
+
+                    //Post name of the user
+                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                        name.setText(documentSnapshot.getString("name"));
                     }
                 });
     }

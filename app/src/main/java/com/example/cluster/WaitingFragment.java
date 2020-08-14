@@ -63,6 +63,7 @@ public class WaitingFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_waiting, container, false);
+        //Show waiting GIF
         ImageView loadingImg = root.findViewById(R.id.waitingImage);
         Glide.with(root).load(R.drawable.tabletennis).into(loadingImg);
         return root;

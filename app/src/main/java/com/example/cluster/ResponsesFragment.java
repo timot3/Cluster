@@ -29,6 +29,7 @@ import java.util.List;
 
 public class ResponsesFragment extends Fragment {
 
+    //UI elements and fields
     ListView listViewLive;
     String clusterID;
 
@@ -41,81 +42,81 @@ public class ResponsesFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_responses, container, false);
 
+        //Set title
         Intent thisScreen = getActivity().getIntent();
         clusterID = thisScreen.getStringExtra("ID");
 
+        //Link UI elements
         ListView listViewDaily = (ListView) root.findViewById(R.id.dailyList);
         listViewLive = (ListView) root.findViewById(R.id.liveList);
 
+        //Connect to firebase
         FirebaseFirestore.getInstance().collection("clusters").document(clusterID)
                 .collection("dailypolls").get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        ArrayList<String> dailyPolls = new ArrayList<>();
-                        ArrayList<String> dailyPollID = new ArrayList<>();
-                        if (task.isComplete()) {
-                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                                String dailyTitle = documentSnapshot.getString("question");
-                                String dailyID = documentSnapshot.getId();
-                                if (dailyTitle != null) {
-                                    dailyPolls.add(dailyTitle);
-                                    dailyPollID.add(dailyID);
-                                }
+                .addOnCompleteListener(task -> {
+
+                    //Get all daily polls and ID from the cluster
+                    ArrayList<String> dailyPolls = new ArrayList<>();
+                    ArrayList<String> dailyPollID = new ArrayList<>();
+                    if (task.isComplete()) {
+
+                        //Loop through the queries
+                        for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                            String dailyTitle = documentSnapshot.getString("question");
+                            String dailyID = documentSnapshot.getId();
+                            if (dailyTitle != null) {
+                                dailyPolls.add(dailyTitle);
+                                dailyPollID.add(dailyID);
                             }
-
-                            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                                    android.R.layout.simple_list_item_1, dailyPolls);
-                            listViewDaily.setAdapter(adapter);
-
-                            listViewDaily.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    //Create new activity
-                                    Intent nextPage = new Intent(getActivity(), DailyPollingResults.class);
-                                    nextPage.putExtra("title", dailyPolls.get(position));
-                                    nextPage.putExtra("pollID", dailyPollID.get(position));
-                                    nextPage.putExtra("clusterID", clusterID);
-                                    startActivity(nextPage);
-                                }
-                            });
                         }
+
+                        //Link listViews
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                                android.R.layout.simple_list_item_1, dailyPolls);
+                        listViewDaily.setAdapter(adapter);
+
+                        listViewDaily.setOnItemClickListener((parent, view, position, id) -> {
+                            //Create new activity and pass relevant info
+                            Intent nextPage = new Intent(getActivity(), DailyPollingResults.class);
+                            nextPage.putExtra("title", dailyPolls.get(position));
+                            nextPage.putExtra("pollID", dailyPollID.get(position));
+                            nextPage.putExtra("clusterID", clusterID);
+                            startActivity(nextPage);
+                        });
                     }
                 });
 
-        // Replace this with Live Polling results
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    FirebaseFirestore.getInstance().collection("clusters").document(clusterID)
-                            .collection("livepolls").document("live").get()
-                            .addOnCompleteListener(task -> {
-                                if (task.isComplete()) {
-                                    ArrayList<String> livePolls = new ArrayList<>();
-                                    DocumentSnapshot snapshot = task.getResult();
+        //Updates live responses list every 3 seconds
+        new Thread(() -> {
+            while (true) {
+                FirebaseFirestore.getInstance().collection("clusters").document(clusterID)
+                        .collection("livepolls").document("live").get()
+                        .addOnCompleteListener(task -> {
+                            if (task.isComplete()) {
+                                ArrayList<String> livePolls = new ArrayList<>();
+                                DocumentSnapshot snapshot = task.getResult();
 
-                                    List<String> replies = (List<String>) snapshot.get("replies");
-                                    if (replies != null || replies.isEmpty()) {
-                                        for (String reply : replies) {
-                                            if (reply != null) {
-                                                livePolls.add(reply);
-                                            }
-                                        }
-                                        try {
-                                            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                                                    android.R.layout.simple_list_item_1, livePolls);
-                                            listViewLive.setAdapter(adapter);
-                                            Log.wtf("Bruh", "reloading");
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
+                                //Get all the replies
+                                List<String> replies = (List<String>) snapshot.get("replies");
+                                if (replies != null || replies.isEmpty()) {
+                                    for (String reply : replies) {
+                                        if (reply != null) {
+                                            livePolls.add(reply);
                                         }
                                     }
+                                    try {
+                                        //Post it in the listView
+                                        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                                                android.R.layout.simple_list_item_1, livePolls);
+                                        listViewLive.setAdapter(adapter);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
                                 }
+                            }
 
-                            });
-                    android.os.SystemClock.sleep(3000);
-                }
+                        });
+                android.os.SystemClock.sleep(3000); //Try after 3 seconds again
             }
         }).start();
         return root;

@@ -22,6 +22,7 @@ import java.util.List;
 
 public class PostPage extends AppCompatActivity {
 
+    //Relevant strings
     String clusterID;
     String postID;
 
@@ -32,6 +33,7 @@ public class PostPage extends AppCompatActivity {
         Intent thisPage = getIntent();
         setTitle(thisPage.getStringExtra("title"));
 
+        //UI element and Firebase references from previous screen
         TextView title = (TextView) findViewById(R.id.titleView);
         title.setText(thisPage.getStringExtra("title"));
         ListView listView = (ListView) findViewById(R.id.replyList);
@@ -39,32 +41,36 @@ public class PostPage extends AppCompatActivity {
         postID = thisPage.getStringExtra("postID");
         TextView questionView = findViewById(R.id.contextView);
 
+        //Connect to firebase
         FirebaseFirestore.getInstance().collection("community").document(clusterID)
                 .collection("posts").document(postID).get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isComplete()) {
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    List<String> replies = (List<String>) documentSnapshot.get("replies");
-                    String question = documentSnapshot.getString("question");
+                .addOnCompleteListener(task -> {
 
-                    if (replies != null && question != null) {
+                    //Check if query is complete
+                    if (task.isComplete()) {
+                        DocumentSnapshot documentSnapshot = task.getResult();
+                        List<String> replies = (List<String>) documentSnapshot.get("replies");
+                        String question = documentSnapshot.getString("question");
 
-                        //Create custom list
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(PostPage.this,
-                                android.R.layout.simple_list_item_1, replies);
-                        listView.setAdapter(adapter);
+                        if (replies != null && question != null) {
 
-                        questionView.setText(question);
+                            //Create custom list and update list
+                            ArrayAdapter<String> adapter = new ArrayAdapter<>(PostPage.this,
+                                    android.R.layout.simple_list_item_1, replies);
+                            listView.setAdapter(adapter);
+
+                            questionView.setText(question);
+                        }
                     }
-                }
-            }
-        });
+                });
     }
 
+    /**
+     * Navigates to the next screen to create a reply
+     * @param view View Object
+     */
     public void createReply(View view) {
-        //Create reply activity
+        //Create reply activity and pass relevant info
         Intent nextPage = new Intent(this, ReplyPost.class);
         nextPage.putExtra("clusterID", clusterID);
         nextPage.putExtra("postID", postID);
@@ -72,6 +78,12 @@ public class PostPage extends AppCompatActivity {
         startActivity(nextPage);
     }
 
+    /**
+     * After post is created, update UI
+     * @param requestCode code from previous screen
+     * @param resultCode not used, implemented by @Override
+     * @param data not used, implemented by @Override
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -21,7 +21,7 @@ public class TeacherView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_view);
 
-
+        //Updating strings to reflect UI
         Intent intent = getIntent();
         String name = intent.getStringExtra("Cluster");
         String title = "";
@@ -34,20 +34,23 @@ public class TeacherView extends AppCompatActivity {
 
         setTitle(title);
 
-
+        //Fragment layout for teachers and UI elements
         TabLayout tabLayout = (TabLayout) findViewById(R.id.TeacherTabLayout);
         TabItem tabPrompt = (TabItem) findViewById(R.id.promptTab);
         TabItem tabResponses = (TabItem) findViewById(R.id.responsesTab);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
 
+        //Setting adapter
         TeacherViewAdapter adapter = new TeacherViewAdapter(getSupportFragmentManager(),
                 tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
 
+        //When a tab is clicked
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                //Go to that fragment
                 viewPager.setCurrentItem(tab.getPosition());
             }
 

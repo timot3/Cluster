@@ -33,49 +33,48 @@ public class SettingsChangeName extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_change_name);
 
+        //Get UI elements
         nameField = findViewById(R.id.newNameField);
         nameButton = findViewById(R.id.changeNameButton);
 
+        //Set title
         Intent intent = getIntent();
         String title = intent.getStringExtra("SettingsNameSwitch");
         setTitle(title);
 
-        nameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String newNameString = nameField.getText().toString();
-                if (TextUtils.isEmpty(newNameString)) {
-                    Toast.makeText(getApplicationContext(), "Enter new name", Toast.LENGTH_LONG).show();
-                }
-                else {
-                    onClickUpdateName(newNameString);
-                }
+        nameButton.setOnClickListener(v -> {
+
+            //Change name
+            String newNameString = nameField.getText().toString();
+            if (TextUtils.isEmpty(newNameString)) {
+                Toast.makeText(getApplicationContext(), "Enter new name", Toast.LENGTH_LONG).show();
+            }
+            else {
+                onClickUpdateName(newNameString);
             }
         });
     }
 
+    /**
+     * Connect to firebase and change name
+     * @param nName new name of the user
+     */
     public void onClickUpdateName(String nName) {
+        //Connect to firebase
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(nName)
                 .build();
+        //Update profile
         user.updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(), "Name updated Successfully", Toast.LENGTH_LONG).show();
-                            Log.d(TAG, "User profile updated.");
-                            finish();
-                        }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(getApplicationContext(), "Name updated Successfully", Toast.LENGTH_LONG).show();
+                        finish();
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(), "Name update failed", Toast.LENGTH_LONG).show();
-                    }
-                });
+                }) //If update fails
+                .addOnFailureListener(e -> Toast.makeText(getApplicationContext(),
+                        "Name update failed", Toast.LENGTH_LONG).show());
     }
 
 }

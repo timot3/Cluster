@@ -27,9 +27,12 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Objects;
 
 public class SettingsChangePassword extends AppCompatActivity {
+
+    //UI elements
     private EditText newPassword;
     private Button reset;
 
+    //Firebase references
     private FirebaseAuth fAuth;
     private String userId;
 
@@ -40,165 +43,79 @@ public class SettingsChangePassword extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_change_password);
 
+        //Link UI elements
         newPassword = findViewById(R.id.newPasswordField);
         reset = findViewById(R.id.submitButton);
         fAuth = FirebaseAuth.getInstance();
         userId = Objects.requireNonNull(fAuth.getCurrentUser()).getEmail();
 
+        //Set title
         Intent intent = getIntent();
         String title = intent.getStringExtra("SettingsPasswordSwitch");
         setTitle(title);
 
-        reset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String password_string = newPassword.getText().toString();
-                if (TextUtils.isEmpty(password_string)) {
-                    Toast.makeText(getApplicationContext(), "Enter new password",
-                            Toast.LENGTH_LONG).show();
-                }
-                else {
-                    onClickUpdatePassword(password_string, v);
-                }
+        //If button is clicked
+        reset.setOnClickListener(v -> {
+            //Set new password in firebase
+            String password_string = newPassword.getText().toString();
+            if (TextUtils.isEmpty(password_string)) {
+                Toast.makeText(getApplicationContext(), "Enter new password",
+                        Toast.LENGTH_LONG).show();
+            }
+            else {
+                onClickUpdatePassword(password_string, v);
             }
         });
     }
 
+    /**
+     * Updates Firebase with new password
+     * @param nPassword new Password
+     * @param v View Object
+     */
     public void onClickUpdatePassword(String nPassword, View v) {
 
         // Reauthenticate the user with their old password
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         AuthCredential credential = EmailAuthProvider.getCredential(userId, nPassword);
         user.reauthenticate(credential)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
 
-                            Log.d(TAG, "User re-authenticated");
+                        //Get UI elements
+                        final EditText reenterPassword = new EditText(v.getContext());
+                        final AlertDialog.Builder reLoginDialog = new AlertDialog.Builder(v.getContext());
 
-                            final EditText reenterPassword = new EditText(v.getContext());
-                            final AlertDialog.Builder reLoginDialog = new AlertDialog.Builder(v.getContext());
-                            //String reenteredPassword = "";
+                        reLoginDialog.setTitle("Enter new password");
+                        reLoginDialog.setMessage("Enter your new password- must be 6+ characters");
+                        reLoginDialog.setView(reenterPassword);
 
-                            reLoginDialog.setTitle("Enter new password");
-                            reLoginDialog.setMessage("Enter your new password- must be 6+ characters");
-                            reLoginDialog.setView(reenterPassword);
+                        reLoginDialog.setPositiveButton("Submit", (dialog, which) -> {
+                            String reenteredPassword = reenterPassword.getText().toString();
+                            // Now set new password
+                            user.updatePassword(reenteredPassword)
+                                    .addOnCompleteListener(task1 -> { //If firebase works
+                                        if (task1.isSuccessful()) {
+                                            Toast.makeText(SettingsChangePassword.this,
+                                                    "Password reset Successful",
+                                                    Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        }
+                                    }) //Firebase returns issues
+                                    .addOnFailureListener(e -> {
+                                        Toast.makeText(SettingsChangePassword.this,
+                                                "Password reset failed", Toast.LENGTH_SHORT)
+                                                .show();
+                                        finish();
+                                    });
+                        });
+                        reLoginDialog.setNegativeButton("Cancel", (dialog, which) -> finish());
 
-                            reLoginDialog.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    String reenteredPassword = reenterPassword.getText().toString();
-                                    // Now set new password
-                                    user.updatePassword(reenteredPassword)
-                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    if (task.isSuccessful()) {
-                                                        Log.d(TAG, "User password updated.");
-                                                        Toast.makeText(SettingsChangePassword.this, "Password reset Successful", Toast.LENGTH_SHORT).show();
-                                                        finish();
-                                                    }
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Toast.makeText(SettingsChangePassword.this, "Password reset failed", Toast.LENGTH_SHORT).show();
-                                                    finish();
-                                                }
-                                            });
-                                }
-                            });
-                            reLoginDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    finish();
-                                }
-                            });
-
-                            AlertDialog reLogin = reLoginDialog.create();
-                            reLogin.show();
-                        }
+                        AlertDialog reLogin = reLoginDialog.create();
+                        reLogin.show();
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(SettingsChangePassword.this, "Wrong password", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-
-
-        // Pop up an alert dialog for their new password
-
-
-//        try {
-//            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//            // Change password
-//            user.updatePassword(nPassword)
-//                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<Void> task) {
-//                            if (task.isSuccessful()) {
-//                                Log.d(TAG, "User password updated.");
-//                            }
-//                        }
-//                    })
-//                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                        @Override
-//                        public void onSuccess(Void aVoid) {
-//                            Toast.makeText(SettingsChangePassword.this, "Password reset successfully", Toast.LENGTH_SHORT).show();
-//                        }
-//                    })
-//                    .addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e) {
-//                            Toast.makeText(SettingsChangePassword.this, "Password Reset Failed", Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
-//        } catch (Exception e) {
-//
-//            Toast.makeText(SettingsChangePassword.this, "Reauthenticating User", Toast.LENGTH_SHORT).show();
-//
-//            // Reauthenticate user
-//            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//
-//            // Make an alert dialog to get their password
-//            final EditText reenterPassword = new EditText(v.getContext());
-//            final AlertDialog.Builder reLoginDialog = new AlertDialog.Builder(v.getContext());
-//            final String[] reenteredPassword = {""};
-//
-//            reLoginDialog.setTitle("Log in expired");
-//            reLoginDialog.setMessage("Enter your password to re-login");
-//            reLoginDialog.setView(reenterPassword);
-//
-//            reLoginDialog.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    reenteredPassword[0] = reenterPassword.getText().toString();
-//                }
-//            });
-//            reLoginDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    // finish()
-//                }
-//            });
-//
-//            AlertDialog reLogin = reLoginDialog.create();
-//            reLogin.show();
-//
-//            // Relogin with the credentials from the previous step
-//            AuthCredential credential = EmailAuthProvider.getCredential(userId, reenteredPassword[0]);
-//            user.reauthenticate(credential)
-//                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<Void> task) {
-//                            Log.d(TAG, "User re-authenticated");
-//                        }
-//                    });
-//        }
+                }) //Invalid password
+                .addOnFailureListener(e -> Toast.makeText(SettingsChangePassword.this,
+                        "Wrong password", Toast.LENGTH_SHORT).show());
     }
 }
