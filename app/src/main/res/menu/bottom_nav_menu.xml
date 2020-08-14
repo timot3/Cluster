@@ -15,14 +15,16 @@
         android:icon="@drawable/create_black_18dp"
         android:title="@string/title_create" />
 
-    <item
-        android:id="@+id/settings"
-        android:icon="@drawable/settings_black_18dp"
-        android:title="@string/title_settings" />
 
     <item
         android:id="@+id/community"
         android:icon="@drawable/ic_forum_black_18dp"
         android:title="Community" />
+
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/settings_black_18dp"
+        android:title="@string/title_settings" />
+
 </menu>
 

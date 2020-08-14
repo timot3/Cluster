@@ -7,12 +7,12 @@
     tools:context=".ui.join.JoinFragment">
 
     <EditText
-        android:background="@drawable/back"
         android:id="@+id/JoinField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/back"
         android:ems="10"
-        android:hint="Enter a Cluster ID"
+        android:hint="Enter Cluster Code"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
